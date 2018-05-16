@@ -4,7 +4,6 @@ import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

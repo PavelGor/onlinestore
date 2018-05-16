@@ -15,7 +15,6 @@
 
 <body>
 <header>
-
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
@@ -70,58 +69,23 @@
 </header>
 
 <div class="container">
+
     <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <img src="..." class="rounded mx-auto d-block" alt="..." width="200" height="200">
-            <div class="name">Название товара</div>
-            <div class="priceWrap">
-                <div class="price">цена</div>
-                <div class="priceCurrency"></div>
+        <#list productList as product>
+        <div class="col-md-3">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Название товара: ${product.name}</h5>
+                    <p class="card-text">Описание товара: ${product.description}</p>
+                    <p class="card-text">Цена: ${product.price}</p>
+                    <a href="product/edit/?id=${product.id}" class="btn btn-primary">Редактировать</a>
+                </div>
             </div>
-            <button type="button" class="btn btn-success float-right">В корзину</button>
         </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            sdfg asd fgadf gaddf gadsfa adffg afgadfg afg afg afgadfgadfg
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            sdfg asd fgadf gaddf gadsfa adffg afgadfg afg afg afgadfgadfg
-        </div>
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            sdfg asd fgadf gaddf gadsfa adffg afgadfg afg afg afgadfgadfg
-        </div>
+        </#list>
     </div>
 
-    <div class="row"></div>
-    <div class="row"></div>
-</div>
-
-
-<div class="container">
-    <div class="row">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Group</th>
-                <th scope="col">Price</th>
-                <th scope="col">imgLink</th>
-            </tr>
-            </thead>
-            <tbody>
-            <#list productList as product>
-            <tr>
-                <td scope="row">${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.productGroup}</td>
-                <td>${product.price?string("##0")}</td>
-                <td>${product.imgLink}</td>
-            </tr>
-            </#list>
-            </tbody>
-        </table>
-    </div>
-</div>
 </div>
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

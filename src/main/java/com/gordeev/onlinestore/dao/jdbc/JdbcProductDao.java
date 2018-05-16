@@ -3,7 +3,6 @@ package com.gordeev.onlinestore.dao.jdbc;
 import com.gordeev.onlinestore.dao.ProductDao;
 import com.gordeev.onlinestore.dao.jdbc.mapper.ProductMapper;
 import com.gordeev.onlinestore.entity.Product;
-import com.gordeev.onlinestore.entity.ProductGroup;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -39,7 +38,9 @@ public class JdbcProductDao implements ProductDao{
     public List<Product> getAll() {
         List<Product> result = new ArrayList<>();
         try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT productid, name, price, description, groupname, imglink FROM onlinestore.product inner join onlinestore.group on onlinestore.product.groupid=onlinestore.group.groupid")){
+             //ResultSet resultSet = statement.executeQuery("SELECT id, name, price, description, group_name, img_link " +
+             //        "FROM product as p inner join group as g on p.group_id=g.id")){
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM onlinestore.product as p inner join onlinestore.group as g on p.group_id=g.id")){
             while (resultSet.next()) {
                 result.add(PRODUCT_MAPPER.mapRow(resultSet));
             }
@@ -51,18 +52,13 @@ public class JdbcProductDao implements ProductDao{
     }
 
     @Override
-    public List<Product> getByGroup(ProductGroup productGroup) {
-        return null;
-    }
-
-    @Override
     public void add(Product product) {
-        String sql = "INSERT INTO product (name, price, description, groupid, imglink) VALUES ( ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product (name, price, description, group_id, img_link) VALUES ( ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
-            statement.setInt(4, 1);                             //допилить работу с группой продукта
+            statement.setInt(4, 1);                             //TODO: допилить работу с группой продукта
             statement.setString(5, product.getImgLink());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -73,11 +69,34 @@ public class JdbcProductDao implements ProductDao{
 
     @Override
     public Product getById(int id) {
-        return null;
+        Product product = new Product();
+        String sql = "SELECT * FROM product WHERE id = " + id;
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)){
+            if (resultSet.next()) {
+                product = PRODUCT_MAPPER.mapRow(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return product;
     }
 
     @Override
-    public void update(Product product) {
-
+    public void edit(Product product) {
+        String sql = "UPDATE product SET name = ?, price = ?, description = ?, group_id = ?, img_link = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, product.getName());
+            statement.setDouble(2, product.getPrice());
+            statement.setString(3, product.getDescription());
+            statement.setInt(4, 1);                             //TODO: допилить работу с группой продукта
+            statement.setString(5, product.getImgLink());
+            statement.setInt(6, product.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }

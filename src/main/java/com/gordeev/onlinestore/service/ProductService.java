@@ -9,25 +9,28 @@ import java.util.List;
 
 public class ProductService {
     private ProductDao productDao = (ProductDao) ServiceLocator.getService("productDao");
-    private final static ProductService instance = new ProductService();
+    private final static ProductService INSTANCE = new ProductService();
 
     public ProductService() {
     }
 
     public static ProductService getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public List<Product> getAll(){
         return productDao.getAll();
     }
 
-    public List<Product> getByGroup(ProductGroup productGroup){
-        return productDao.getByGroup(productGroup);
-    }
-
     public void add(Product product){
         productDao.add(product);
     }
 
+    public void edit(Product product){
+        productDao.edit(product);
+    }
+
+    public Product getById(int id) {
+        return productDao.getById(id);
+    }
 }

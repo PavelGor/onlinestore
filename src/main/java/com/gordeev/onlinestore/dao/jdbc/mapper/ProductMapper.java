@@ -9,12 +9,12 @@ public class ProductMapper {
     public Product mapRow(ResultSet resultSet) throws SQLException {
         Product product = new Product();
 
-        product.setId(resultSet.getInt("productid"));
+        product.setId(resultSet.getInt("id"));
         product.setName(resultSet.getString("name"));
-        product.setProductGroup(resultSet.getString("groupname"));
+        product.setProductGroup("Сок"); //TODO: fix groups
         product.setPrice(resultSet.getDouble("price"));
         product.setDescription(resultSet.getString("description"));
-        product.setImgLink(resultSet.getString("imglink"));
+        product.setImgLink(resultSet.getString("img_link"));
 
         return product;
     }

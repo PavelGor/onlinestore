@@ -1,7 +1,7 @@
-package com.gordeev.onlinestore.web.servlet;
+package com.gordeev.onlinestore.web.servlet.utils;
 
 import com.gordeev.onlinestore.entity.Product;
-import org.eclipse.jetty.servlet.ServletHolder;
+import com.gordeev.onlinestore.web.servlet.AddProductServlet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,14 +11,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AddProductServletTest {
+public class ServletUtilsTest {
 
-    Product expectedProduct;
-    HttpServletRequest request;
-    AddProductServlet addProductServlet = new AddProductServlet();
+    private Product expectedProduct;
+    private HttpServletRequest request;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         expectedProduct = new Product();
         expectedProduct.setId(1);
@@ -40,7 +39,7 @@ public class AddProductServletTest {
 
     @Test
     public void createProductFromRequestTest() {
-        Product actualProduct = addProductServlet.createProductFromRequest(request);
+        Product actualProduct = ServletUtils.createProductFromRequest(request);
         assertNotNull(actualProduct);
         assertEquals(expectedProduct.getId(),actualProduct.getId());
         assertEquals(expectedProduct.getName(),actualProduct.getName());
