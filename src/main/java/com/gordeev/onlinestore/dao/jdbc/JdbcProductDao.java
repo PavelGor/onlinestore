@@ -7,6 +7,8 @@ import com.gordeev.onlinestore.entity.Product;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JdbcProductDao implements ProductDao{
     /**
@@ -24,12 +26,14 @@ public class JdbcProductDao implements ProductDao{
 
     private Connection connection;
 
+    static final Logger LOG = LoggerFactory.getLogger(JdbcProductDao.class);
+
     public JdbcProductDao() {
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(JDBC_DATABASE_URL, USER, PASSWORD);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.trace("getAll(): ",e);
             throw new RuntimeException(e);
         }
     }
@@ -45,7 +49,7 @@ public class JdbcProductDao implements ProductDao{
                 result.add(PRODUCT_MAPPER.mapRow(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.trace("getAll(): ",e);
             throw new RuntimeException(e);
         }
         return result;
@@ -62,7 +66,7 @@ public class JdbcProductDao implements ProductDao{
             statement.setString(5, product.getImgLink());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.trace("getAll(): ",e);
             throw new RuntimeException(e);
         }
     }
@@ -77,7 +81,7 @@ public class JdbcProductDao implements ProductDao{
                 product = PRODUCT_MAPPER.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.trace("getAll(): ",e);
             throw new RuntimeException(e);
         }
         return product;
@@ -95,7 +99,7 @@ public class JdbcProductDao implements ProductDao{
             statement.setInt(6, product.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.trace("getAll(): ",e);
             throw new RuntimeException(e);
         }
     }
