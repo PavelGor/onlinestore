@@ -1,102 +1,130 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <title>List of products</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
-          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
+    <title>Online Store</title>
+    <style>
+        .container-header{
+            background-color: #f8f9fa;
+        }
+        .footer{
+            background-color: #f8f9fa;
+            margin-top:10px;
+        }
+        .admin-btn{
+            width:75px;
+            margin:5px;
+        }
+        .card-img-top{
+            width:250px;
+            height:150px;
+        }
+        .card {
+            margin-top:10px;
+            height:404px;
+        }
+    </style>
 </head>
-
 <body>
+
 <header>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <img src="img/logoBiola.png" class="rounded float-left" alt="logo Biola">
+    <div class="container-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+            <a class="navbar-brand" href="/products">
+                <img src="https://assets3.insales.ru/assets/1/1431/214423/v_1500006566/build/cart1.png" width="30"
+                     height="30" class="d-inline-block align-top"
+                     alt="">
+                Online Store
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <div>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product/add">Add</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
+                    </form>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success float-right">Cart</button>
+                    <button type="button" class="btn btn-link float-right">Enter</button>
+                </div>
             </div>
-            <div class="col">
-                +38 050 999 99 99, +38 098 999 99 99
-                <br>
-                +38 056 999 99 99, +38 066 666 66 66
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-success float-right">Корзина</button>
-                <button type="button" class="btn btn-link float-right">Вход</button>
-            </div>
-        </div>
-
-        <div class="row align-items-center">
-
-            <div class="col-sm-3">
-                <a class="navbar-brand" href="#">Категории товаров</a>
-            </div>
-            <div class="col-sm-6">
-                <form>
-                    <div class="row">
-                        <div class="col-sm-9">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Найти</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col">
-                <form>
-                    <div class="row">
-                        <div class="col">
-                            <label class="float-right">Валюта:</label>
-                        </div>
-                        <div class="col">
-                            <select class="form-control">
-                                <option>UAH</option>
-                                <option>USD</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-        </div>
+        </nav>
     </div>
 </header>
 
-<div class="container">
-
-    <div class="row">
-        <#list productList as product>
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src=".../100px180/" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Название товара: ${product.name}</h5>
-                    <p class="card-text">Описание товара: ${product.description}</p>
-                    <p class="card-text">Цена: ${product.price}</p>
-                    <a href="product/edit/?id=${product.id}" class="btn btn-primary">Редактировать</a>
+<main>
+    <div class="container">
+        <div class="row">
+            <#list productList as product>
+            <div class="col-md-3">
+                <div class="card">
+                    <img class="card-img-top card-img" src="${product.imgLink}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">${product.description}</p>
+                        <p class="card-text">Price: ${product.price}</p>
+                        <div>
+                            <a href="#" class="btn btn-primary btn-block">Add to cart</a>
+                        </div>
+                        <div class="admin-btns justify-content-between">
+                            <a href="product/edit/?id=${product.id}" class="btn btn-warning admin-btn">Edit</a>
+                            <a href="#" class="btn btn-danger float-right admin-btn">Delete</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            </#list>
         </div>
-        </#list>
     </div>
+</main>
 
-</div>
+<footer class="footer">
+    <div class="container footer">
+        <div class="row  justify-content-between">
+            <div class="link-to-top d-flex align-items-center">
+                <a href="#top">Go to top</a>
+            </div>
+            <div class="contacts d-flex align-items-center">
+                +38 050 555 55 55, +38 067 777 77 77
+            </div>
+            <div class="developed-by d-flex align-items-center">
+                Developed by @some company
+            </div>
+        </div>
+    </div>
+</footer>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
-        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
         crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
-        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
         crossorigin="anonymous"></script>
 </body>
 </html>

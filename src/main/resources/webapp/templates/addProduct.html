@@ -10,55 +10,110 @@
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
     <title>Add Product</title>
+    <style>
+        .container-header{
+            background-color: #f8f9fa;
+        }
+        .footer{
+            background-color: #f8f9fa;
+            margin-top:10px;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-    <nav class="navbar navbar-dark bg-dark">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link active" href="/products">Товары</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/product/add">Добавить товар</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="container-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+            <a class="navbar-brand" href="/products">
+                <img src="https://assets3.insales.ru/assets/1/1431/214423/v_1500006566/build/cart1.png" width="30"
+                     height="30" class="d-inline-block align-top"
+                     alt="">
+                Online Store
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                <div>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product/add">Add</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-6">
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
+                    </form>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-success float-right">Cart</button>
+                    <button type="button" class="btn btn-link float-right">Enter</button>
+                </div>
+            </div>
+        </nav>
+    </div>
 </header>
 
-
-<div class="container">
-    <div>
-        <h3 class="col-sm-6">Добавить новый товар:</h3>
+<main>
+    <div class="container">
+        <div>
+            <h3 class="col-sm-6">Добавить новый товар:</h3>
+        </div>
+        <form method="post">
+            <div class="form-group">
+                <label for="name" class="col-sm-2 col-form-label">Наименование</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="price" id="price" placeholder="price">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="description" id="description"
+                           placeholder="description">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="imgLink" id="imgLink" placeholder="imgLink">
+                </div>
+            </div>
+            <div class="form-group row justify-content-center">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </div>
+        </form>
     </div>
-    <form method="post">
-        <div class="form-group row">
-            <label for="name" class="col-sm-2 col-form-label">Наименование</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" id="name" placeholder="name">
+</main>
+
+<footer class="footer">
+    <div class="container footer">
+        <div class="row  justify-content-between">
+            <div class="link-to-top d-flex align-items-center">
+                <a href="#top">Go to top</a>
+            </div>
+            <div class="contacts d-flex align-items-center">
+                +38 050 555 55 55, +38 067 777 77 77
+            </div>
+            <div class="developed-by d-flex align-items-center">
+                Developed by @some company
             </div>
         </div>
-        <div class="form-group row">
-            <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="price" id="price" placeholder="price">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="description">Описание:</label>
-            <input type="text" class="form-control" name="description" id="description" placeholder="description">
-        </div>
-        <div class="form-group row">
-            <label for="imgLink">Добавить изображение:</label>
-            <input type="file" class="form-control-file" name="imgLink" id="imgLink">
-        </div>
-        <div class="form-group row justify-content-center">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-        </div>
-
-    </form>
-
-</div>
+    </div>
+</footer>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
