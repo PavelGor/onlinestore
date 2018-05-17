@@ -17,7 +17,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.gordeev.onlinestore" level="TRACE"/>
+    <logger name="com.gordeev.onlinestore" level="DEBUG"/>
 
 
     <root level="debug">
