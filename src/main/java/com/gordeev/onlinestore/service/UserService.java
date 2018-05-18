@@ -9,7 +9,7 @@ public class UserService {
     private List<User> users = new ArrayList<>();
 
     public UserService() {
-        users.add(new User("user","user"));
+        //users.add(new User("user","user"));
         users.add(new User("admin","admin"));
     }
 

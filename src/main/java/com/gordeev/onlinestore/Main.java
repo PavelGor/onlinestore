@@ -26,7 +26,8 @@ public class Main {
         context.addServlet(new ServletHolder(new EditProductServlet()), "/product/edit/*");
         context.addServlet(new ServletHolder(new LoginPageServlet()), "/login");
 
-        context.addFilter(SecurityFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(SecurityFilter.class, "/product/add/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(SecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));
 
         Server server = new Server(8080);
         server.setHandler(context);

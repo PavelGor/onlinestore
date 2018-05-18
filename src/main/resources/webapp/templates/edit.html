@@ -71,14 +71,14 @@
             <div class="form-group">
                 <label for="name" class="col-sm-2 col-form-label">Наименование</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" placeholder="name"
+                    <input type="text" class="form-control" name="name" id="name" required placeholder="name"
                            value="${product.name}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="price" id="price" placeholder="price"
+                    <input type="text" class="form-control" name="price" id="price" required placeholder="price"
                            value="${product.price}">
                 </div>
             </div>
@@ -86,13 +86,13 @@
                 <label for="description" class="col-sm-2 col-form-label">Описание:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="description" id="description"
-                           placeholder="description" value="${product.description}">
+                           required placeholder="description" value="${product.description}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="imgLink" id="imgLink" placeholder="imgLink"
+                    <input type="text" class="form-control" name="imgLink" id="imgLink" required placeholder="imgLink"
                            value="${product.imgLink}">
                 </div>
             </div>
