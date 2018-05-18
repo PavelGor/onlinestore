@@ -66,7 +66,7 @@ public class JdbcProductDao implements ProductDao{
             statement.setString(5, product.getImgLink());
             statement.executeUpdate();
         } catch (SQLException e) {
-            LOG.trace("getAll(): ",e);
+            LOG.trace("add(): ",e);
             throw new RuntimeException(e);
         }
     }
@@ -81,7 +81,7 @@ public class JdbcProductDao implements ProductDao{
                 product = PRODUCT_MAPPER.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            LOG.trace("getAll(): ",e);
+            LOG.trace("getById(): ",e);
             throw new RuntimeException(e);
         }
         return product;
@@ -99,7 +99,20 @@ public class JdbcProductDao implements ProductDao{
             statement.setInt(6, product.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            LOG.trace("getAll(): ",e);
+            LOG.trace("edit(): ",e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    //по хорошему удалять продукты из БД нельзя - история, необходимо ставить статус неактивен. Но похоже всё зависит от ТЗ
+    @Override
+    public void delete(Product product) {
+        String sql = "DELETE FROM `product` WHERE `id`= ?;";
+        try (PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, product.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOG.trace("delete(): ",e);
             throw new RuntimeException(e);
         }
     }

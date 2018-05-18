@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
-    <title>Online Store</title>
+    <title>Hello, world!</title>
     <style>
         .container-header{
             background-color: #f8f9fa;
@@ -18,18 +18,7 @@
             background-color: #f8f9fa;
             margin-top:10px;
         }
-        .admin-btn{
-            width:75px;
-            margin:5px;
-        }
-        .card-img-top{
-            width:250px;
-            height:150px;
-        }
-        .card {
-            margin-top:10px;
-            height:404px;
-        }
+
     </style>
 </head>
 <body>
@@ -66,7 +55,7 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-success float-right">Cart</button>
-                    <a href="/login"  class="btn btn-link float-right" role="button">Enter</a>
+                    <button type="button" class="btn btn-link float-right">Enter</button>
                 </div>
             </div>
         </nav>
@@ -75,27 +64,42 @@
 
 <main>
     <div class="container">
-        <div class="row">
-            <#list productList as product>
-            <div class="col-md-3">
-                <div class="card">
-                    <img class="card-img-top card-img" src="${product.imgLink}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text">${product.description}</p>
-                        <p class="card-text">Price: ${product.price}</p>
-                        <div>
-                            <a href="#" class="btn btn-primary btn-block">Add to cart</a>
-                        </div>
-                        <div class="admin-btns justify-content-between">
-                            <a href="product/edit/?id=${product.id}" class="btn btn-warning admin-btn">Edit</a>
-                            <a href="product/delete/?id=${product.id}" class="btn btn-danger float-right admin-btn">Delete</a>
-                        </div>
-                    </div>
+        <div>
+            <h3 class="col-sm-6">Подтвердите удаление товара:</h3>
+        </div>
+        <form method="post">
+            <div class="form-group">
+                <label for="name" class="col-sm-2 col-form-label">Наименование</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="name" id="name" required  placeholder="name"
+                           value="${product.name}">
                 </div>
             </div>
-            </#list>
-        </div>
+            <div class="form-group">
+                <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="price" id="price" required  placeholder="price"
+                           value="${product.price}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="description" id="description"
+                           required  placeholder="description" value="${product.description}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="imgLink" id="imgLink" required  placeholder="imgLink"
+                           value="${product.imgLink}">
+                </div>
+            </div>
+            <div class="form-group row justify-content-center">
+                <button type="submit" class="btn btn-primary">Удалить</button>
+            </div>
+        </form>
     </div>
 </main>
 
@@ -114,7 +118,6 @@
         </div>
     </div>
 </footer>
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
