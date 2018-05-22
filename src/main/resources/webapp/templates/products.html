@@ -69,7 +69,12 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-success float-right">Cart</button>
+                    <#if userName??>
+                    <a href="/exit"  class="btn btn-link float-right" role="button">Exit(${userName})</a>
+                    <#else>
                     <a href="/login"  class="btn btn-link float-right" role="button">Enter</a>
+                    </#if>
+
                 </div>
             </div>
         </nav>

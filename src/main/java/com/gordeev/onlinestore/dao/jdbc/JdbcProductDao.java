@@ -42,9 +42,7 @@ public class JdbcProductDao implements ProductDao{
     public List<Product> getAll() {
         List<Product> result = new ArrayList<>();
         try (Statement statement = connection.createStatement();
-             //ResultSet resultSet = statement.executeQuery("SELECT id, name, price, description, group_name, img_link " +
-             //        "FROM product as p inner join group as g on p.group_id=g.id")){
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM onlinestore.product as p inner join onlinestore.group as g on p.group_id=g.id")){
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM product")){
             while (resultSet.next()) {
                 result.add(PRODUCT_MAPPER.mapRow(resultSet));
             }
