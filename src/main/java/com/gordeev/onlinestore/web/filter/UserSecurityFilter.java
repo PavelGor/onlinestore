@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AdminSecurityFilter implements Filter{
+public class UserSecurityFilter implements Filter{
     @Override
-    public void init(FilterConfig filterConfig)  {
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -31,7 +31,7 @@ public class AdminSecurityFilter implements Filter{
                     Session session = securityService.getSession(cookie.getValue());
                     String userName = session.getUser().getUsername();
 
-                    if ("admin".equals(userName)){
+                    if ("user".equals(userName)){ //TODO: next step - get users from DB
                         isAuth = true;
                         break;
                     }
@@ -51,4 +51,3 @@ public class AdminSecurityFilter implements Filter{
 
     }
 }
-
