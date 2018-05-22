@@ -1,25 +1,28 @@
 package com.gordeev.onlinestore.service;
 
+import com.gordeev.onlinestore.dao.UserDao;
 import com.gordeev.onlinestore.entity.User;
+import com.gordeev.onlinestore.locator.ServiceLocator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-    private List<User> users = new ArrayList<>();
+    private UserDao userDao = (UserDao) ServiceLocator.getService("userDao");
 
     public UserService() {
-        //users.add(new User("user","user"));
-        users.add(new User("admin","admin"));
     }
 
+    public User getByName (String name) {return userDao.getByName(name);}
+
     public User autenticate(String name, String password){
-        for (User user : users) {
-            if (user.getUsername().equals(name) && user.getPassword().equals(password)) {
+        User user = getByName(name);
+
+        if (user != null) {
+            if (user.getPassword().equals(password)){
                 return user;
             }
         }
-
         return null;
     }
 }

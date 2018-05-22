@@ -31,9 +31,4 @@ public class ProductsServlet extends HttpServlet {
         pageVariables.put("productList", productList == null ? "" : productList);
         resp.getWriter().println(PageGenerator.instance().getPage("products.html", pageVariables));
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        doGet(req, resp);
-    }
 }

@@ -3,4 +3,6 @@
 *.jar
 *.war
 *.ear
-.target/*
+target/
+*.iml
+*.log

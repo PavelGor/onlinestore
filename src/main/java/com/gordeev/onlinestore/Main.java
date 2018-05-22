@@ -1,7 +1,9 @@
 package com.gordeev.onlinestore;
 
 import com.gordeev.onlinestore.dao.jdbc.JdbcProductDao;
-import com.gordeev.onlinestore.filter.SecurityFilter;
+import com.gordeev.onlinestore.dao.jdbc.JdbcUserDao;
+import com.gordeev.onlinestore.security.SecurityService;
+import com.gordeev.onlinestore.web.filter.AdminSecurityFilter;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.service.UserService;
 import com.gordeev.onlinestore.web.servlet.*;
@@ -15,7 +17,9 @@ import java.util.EnumSet;
 public class Main {
     public static void main(String[] args) throws Exception{
         ServiceLocator.register("productDao", new JdbcProductDao());
+        ServiceLocator.register("userDao", new JdbcUserDao());
         ServiceLocator.register("userService", new UserService());
+        ServiceLocator.register("securityService", new SecurityService());
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new ProductsServlet()), "/products");
@@ -24,9 +28,9 @@ public class Main {
         context.addServlet(new ServletHolder(new LoginPageServlet()), "/login");
         context.addServlet(new ServletHolder(new DeleteProductServlet()), "/product/delete/*");
 
-        context.addFilter(SecurityFilter.class, "/product/add/*", EnumSet.of(DispatcherType.REQUEST));
-        context.addFilter(SecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));
-        context.addFilter(SecurityFilter.class, "/product/delete/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(AdminSecurityFilter.class, "/product/add/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(AdminSecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));
+        context.addFilter(AdminSecurityFilter.class, "/product/delete/*", EnumSet.of(DispatcherType.REQUEST));
 
         Server server = new Server(8080);
         server.setHandler(context);

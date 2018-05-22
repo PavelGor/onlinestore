@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
-    <title>Add Product</title>
+    <title>Cart</title>
     <style>
         .container-header{
             background-color: #f8f9fa;
+        }
+        .product{
+            background-color: #f8f9fa;
+            margin:10px;
         }
         .footer{
             background-color: #f8f9fa;
@@ -21,6 +25,11 @@
         .search-form input{
             width:350px !important;
         }
+        .product-img{
+            width:250px;
+            height:150px;
+        }
+
     </style>
 </head>
 <body>
@@ -67,35 +76,44 @@
 <main>
     <div class="container">
         <div>
-            <h3 class="col-sm-6">Добавить новый товар:</h3>
+            <h3 class="col-sm-6">Заказать товар:</h3>
         </div>
         <form method="post">
-            <div class="form-group">
-                <label for="name" class="col-sm-2 col-form-label">Наименование</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" required>
+            <div class="row product justify-content-between">
+                <div class="product-img">
+                    <img src="${product.imgLink}" alt="Card image cap">
+                </div>
+
+                <div class="product-description">
+                    <div class="name">
+                        ${product.name}
+                    </div>
+                    <div class="row price-qty justify-content-between">
+                        <div class="col-6 price">
+                            <p class="card-text">Price: ${product.price}</p>
+                        </div>
+                        <div class="col-6 qty">
+                            Кол-во: ${product.qty}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-value">
+                    ${product.price} * ${product.qty}
+                </div>
+
+                <div class="delete-btn">
+                    <a href="product/delete/?id=${product.id}" class="btn btn-outline-danger">Delete</a>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="price" id="price" required>
+
+            <div class="row">
+                <div class="col-6 order-btn">
+                    <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="description" id="description" required>
+                <div class="col-6 cart-value">
+                    Итого:
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="imgLink" id="imgLink" required>
-                </div>
-            </div>
-            <div class="form-group row justify-content-center">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
             </div>
         </form>
     </div>

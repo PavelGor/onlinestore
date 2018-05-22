@@ -33,7 +33,7 @@ public class JdbcProductDao implements ProductDao{
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(JDBC_DATABASE_URL, USER, PASSWORD);
         } catch (SQLException | ClassNotFoundException e) {
-            LOG.trace("getAll(): ",e);
+            LOG.trace("Constructor: ",e);
             throw new RuntimeException(e);
         }
     }
