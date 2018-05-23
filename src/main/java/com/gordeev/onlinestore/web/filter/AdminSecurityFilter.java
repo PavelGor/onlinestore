@@ -10,37 +10,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AdminSecurityFilter implements Filter{
+public class AdminSecurityFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig)  {
+    public void init(FilterConfig filterConfig) {
 
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
         boolean isAuth = false;
-        Cookie[] cookies = httpServletRequest.getCookies();
 
-        if (cookies != null){
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token") && securityService.isValid(cookie.getValue())){
+        String userName = securityService.getName((HttpServletRequest) request);
 
-                    Session session = securityService.getSession(cookie.getValue());
-                    String userName = session.getUser().getUsername();
-
-                    if ("admin".equals(userName)){
-                        isAuth = true;
-                        break;
-                    }
-                }
-            }
+        if (securityService.isValid(request) && "admin".equals(userName)) {
+            isAuth = true;
         }
 
-        if (isAuth){
-            chain.doFilter(request,response);
+        if (isAuth) {
+            chain.doFilter(request, response);
         } else {
             httpServletResponse.sendRedirect("/login");
         }

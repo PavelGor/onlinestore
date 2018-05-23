@@ -28,7 +28,6 @@
         }
         .card {
             margin-top:10px;
-            height:404px;
         }
         .search-form input{
             width:350px !important;
@@ -56,9 +55,13 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
                         </li>
+                        <#if userName??>
+                        <#if userName=="admin">
                         <li class="nav-item">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
+                        </#if>
+                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -68,7 +71,7 @@
                     </form>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success float-right">Cart</button>
+                    <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                     <#if userName??>
                     <a href="/exit"  class="btn btn-link float-right" role="button">Exit(${userName})</a>
                     <#else>
@@ -93,12 +96,20 @@
                         <p class="card-text">${product.description}</p>
                         <p class="card-text">Price: ${product.price}</p>
                         <div>
-                            <a href="#" class="btn btn-primary btn-block">Add to cart</a>
+                            <#if userName??>
+                            <#if userName=="user">
+                            <a href="product/cart/?id=${product.id}" class="btn btn-primary btn-block" name="id" id="${product.id}">Add to cart</a>
+                            </#if>
+                            </#if>
                         </div>
+                        <#if userName??>
+                        <#if userName=="admin">
                         <div class="admin-btns justify-content-between">
                             <a href="product/edit/?id=${product.id}" class="btn btn-warning admin-btn">Edit</a>
                             <a href="product/delete/?id=${product.id}" class="btn btn-danger float-right admin-btn">Delete</a>
                         </div>
+                        </#if>
+                        </#if>
                     </div>
                 </div>
             </div>

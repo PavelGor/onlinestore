@@ -4,6 +4,7 @@ import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Session {
@@ -11,7 +12,7 @@ public class Session {
     private User user;
     private LocalDateTime expiredTime;
     private String token;
-    private List<Product> cart;
+    private List<Product> cart = new ArrayList<>(); // кол-во продуктов в корзине не учтено!!!
 
     public User getUser() {
         return user;
@@ -35,6 +36,18 @@ public class Session {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<Product> getCart() {
+        return cart;
+    }
+
+    public void addToCart(Product product){
+        cart.add(product);
+    }
+
+    public void removeFromCard (Product product){
+        cart.remove(product);
     }
 
     @Override

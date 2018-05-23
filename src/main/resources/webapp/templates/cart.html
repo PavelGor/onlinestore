@@ -53,9 +53,13 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
                         </li>
+                        <#if userName??>
+                        <#if userName=="admin">
                         <li class="nav-item">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
+                        </#if>
+                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -65,8 +69,12 @@
                     </form>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success float-right">Cart</button>
-                    <button type="button" class="btn btn-link float-right">Enter</button>
+                    <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
+                    <#if userName??>
+                    <a href="/exit"  class="btn btn-link float-right" role="button">Exit(${userName})</a>
+                    <#else>
+                    <a href="/login"  class="btn btn-link float-right" role="button">Enter</a>
+                    </#if>
                 </div>
             </div>
         </nav>
@@ -79,33 +87,36 @@
             <h3 class="col-sm-6">Заказать товар:</h3>
         </div>
         <form method="post">
+
+            <#list productList as product>
             <div class="row product justify-content-between">
-                <div class="product-img">
-                    <img src="${product.imgLink}" alt="Card image cap">
+                <div >
+                    <img class="product-img" src="${product.imgLink}" alt="Cart image cap">
                 </div>
 
-                <div class="product-description">
+                <div class="product-description"  style="align-self: center;">
                     <div class="name">
                         ${product.name}
                     </div>
                     <div class="row price-qty justify-content-between">
                         <div class="col-6 price">
-                            <p class="card-text">Price: ${product.price}</p>
+                            <p class="card-text">Цена: ${product.price} грн</p>
                         </div>
                         <div class="col-6 qty">
-                            Кол-во: ${product.qty}
+                            Кол-во: 1 шт.
                         </div>
                     </div>
                 </div>
 
-                <div class="product-value">
-                    ${product.price} * ${product.qty}
+                <div class="product-value" style="align-self: center">
+                    Стоимость: ${product.price} грн
                 </div>
 
-                <div class="delete-btn">
-                    <a href="product/delete/?id=${product.id}" class="btn btn-outline-danger">Delete</a>
+                <div class="delete-btn" style="align-self: center" >
+                    <a href="product/delete/?id=${product.id}" class="btn btn-outline-danger" >Delete</a>
                 </div>
             </div>
+            </#list>
 
             <div class="row">
                 <div class="col-6 order-btn">

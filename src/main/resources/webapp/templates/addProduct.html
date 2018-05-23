@@ -44,9 +44,13 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/products">Home <span class="sr-only">(current)</span></a>
                         </li>
+                        <#if userName??>
+                        <#if userName=="admin">
                         <li class="nav-item">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
+                        </#if>
+                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -56,8 +60,12 @@
                     </form>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-success float-right">Cart</button>
-                    <button type="button" class="btn btn-link float-right">Enter</button>
+                    <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
+                    <#if userName??>
+                    <a href="/exit"  class="btn btn-link float-right" role="button">Exit(${userName})</a>
+                    <#else>
+                    <a href="/login"  class="btn btn-link float-right" role="button">Enter</a>
+                    </#if>
                 </div>
             </div>
         </nav>
