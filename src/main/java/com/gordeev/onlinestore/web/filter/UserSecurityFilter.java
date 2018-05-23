@@ -18,25 +18,13 @@ public class UserSecurityFilter implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
         boolean isAuth = false;
-        Cookie[] cookies = httpServletRequest.getCookies();
+        String userName = securityService.getName((HttpServletRequest) request);
 
-        if (cookies != null){
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token") && securityService.isValid(cookie.getValue())){
-
-                    Session session = securityService.getSession(cookie.getValue());
-                    String userName = session.getUser().getUsername();
-
-                    if ("user".equals(userName)){ //TODO: next step - get users from DB
-                        isAuth = true;
-                        break;
-                    }
-                }
-            }
+        if (securityService.isValid(request) && "user".equals(userName)) {
+            isAuth = true;
         }
 
         if (isAuth){

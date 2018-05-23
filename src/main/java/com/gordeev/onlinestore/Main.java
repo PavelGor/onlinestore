@@ -29,9 +29,10 @@ public class Main {
         context.addServlet(new ServletHolder(new LoginPageServlet()), "/login");
         context.addServlet(new ServletHolder(new DeleteProductServlet()), "/product/delete/*");
         context.addServlet(new ServletHolder(new ExitPageServlet()), "/exit");
+        context.addServlet(new ServletHolder(new CartPageServlet()), "/cart");
+        context.addServlet(new ServletHolder(new AddToCartPageServlet()), "/product/cart/*");
 
         context.addFilter(UserSecurityFilter.class, "/cart", EnumSet.of(DispatcherType.REQUEST));
-
         context.addFilter(AdminSecurityFilter.class, "/product/add/*", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(AdminSecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(AdminSecurityFilter.class, "/product/delete/*", EnumSet.of(DispatcherType.REQUEST));

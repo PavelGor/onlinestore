@@ -12,7 +12,7 @@ public class ExitPageServlet extends HttpServlet {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("user-token")){
-                cookie.setValue("балалайку");
+                cookie.setValue("входа нет");
             }
         }
         response.sendRedirect("/products");

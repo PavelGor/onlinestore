@@ -1,7 +1,11 @@
 package com.gordeev.onlinestore.web.servlet.utils;
 
 import com.gordeev.onlinestore.entity.Product;
+import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.security.SecurityService;
+import com.gordeev.onlinestore.security.Session;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class ServletUtils {
