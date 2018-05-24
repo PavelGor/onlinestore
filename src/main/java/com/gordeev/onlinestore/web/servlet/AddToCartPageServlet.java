@@ -5,9 +5,7 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.ProductService;
-import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

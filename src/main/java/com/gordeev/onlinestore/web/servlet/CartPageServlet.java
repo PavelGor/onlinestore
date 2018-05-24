@@ -4,11 +4,9 @@ import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
-import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +17,6 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
 
-    private ProductService productService = ProductService.getInstance();
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
     @Override
