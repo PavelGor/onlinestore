@@ -1,4 +1,4 @@
-package com.gordeev.onlinestore.web.servlet;
+package com.gordeev.onlinestore.web.servlet.security;
 
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.locator.ServiceLocator;
@@ -15,20 +15,20 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class LoginPageServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     private UserService userService = (UserService) ServiceLocator.getService("userService");
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(PageGenerator.instance().getPage("login.html"));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=utf-8");
+        int MAX_AGE_SESSION = 300;
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
@@ -42,12 +42,12 @@ public class LoginPageServlet extends HttpServlet {
             session.setUser(user);
             session.setToken(token);
 
-            LocalDateTime time = LocalDateTime.now();
-            time = time.plusMinutes(5);
+            LocalDateTime time = LocalDateTime.now().plusSeconds(MAX_AGE_SESSION);
             session.setExpiredTime(time);
             securityService.getSessionList().add(session);
 
             Cookie cookie = new Cookie("user-token", token);
+            cookie.setMaxAge(MAX_AGE_SESSION);
             response.addCookie(cookie);
             response.sendRedirect("/products");
         } else {

@@ -1,6 +1,7 @@
 package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
+import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
@@ -26,20 +27,19 @@ public class EditProductServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.getById(id);
 
-        String userName = securityService.getName(request);
-        if (userName != null){
-            pageVariables.put("userName", userName);
+        User user = securityService.getUser(ServletUtils.getToken(request));
+        if (user != null){
+            pageVariables.put("userName", user.getUserName());
         }
 
         pageVariables.put("product", product);
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(PageGenerator.instance().getPage("edit.html", pageVariables));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Product product = ServletUtils.createProductFromRequest(request);
+        Product product = ServletUtils.getProductFromRequest(request);
 
         productService.edit(product);
 

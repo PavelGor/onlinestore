@@ -20,6 +20,7 @@ CREATE TABLE `user` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
+  `role` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`));
 
 CREATE TABLE `session` (
@@ -33,3 +34,5 @@ CREATE TABLE `cart` (
   `session_id` INT NOT NULL,
   `product_id` INT NOT NULL,
   `product_qty` INT NOT NULL);
+
+

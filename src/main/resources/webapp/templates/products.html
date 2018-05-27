@@ -49,13 +49,18 @@
                     </form>
                 </div>
                 <div>
+                    <form method="post">
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                     <#if userName??>
+
                     <a href="/exit"  class="btn btn-link float-right" role="button">Exit(${userName})</a>
+                        <!--
+                           <button type="button" class="btn btn-link  float-right" onclick="location.href = '/exit';">Exit(${userName})</button>
+                       -->
                     <#else>
                     <a href="/login"  class="btn btn-link float-right" role="button">Enter</a>
                     </#if>
-
+                    </form>
                 </div>
             </div>
         </nav>

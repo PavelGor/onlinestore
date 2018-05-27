@@ -5,6 +5,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PageGenerator {
@@ -22,7 +23,7 @@ public class PageGenerator {
         Writer stream = new StringWriter();
         try {
             String filePath;
-            filePath = getClass().getClassLoader().getResource(file.getPath()).getPath();
+            filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
             filePath = filePath.substring(filePath.indexOf("target"));
             Template template = cfg.getTemplate(filePath);
             template.process(data, stream);
@@ -33,18 +34,7 @@ public class PageGenerator {
     }
 
     public String getPage(String filename) {
-        File file = new File("webapp/templates",filename);
-        Writer stream = new StringWriter();
-        try {
-            String filePath;
-            filePath = getClass().getClassLoader().getResource(file.getPath()).getPath();
-            filePath = filePath.substring(filePath.indexOf("target"));
-            Template template = cfg.getTemplate(filePath);
-            template.process(null, stream);
-        } catch (IOException | TemplateException | NullPointerException e) {
-            throw new RuntimeException(e);
-        }
-        return stream.toString();
+        return getPage(filename, new HashMap<>());
     }
 
     private PageGenerator() {

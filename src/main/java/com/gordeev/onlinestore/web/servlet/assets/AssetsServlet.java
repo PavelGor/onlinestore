@@ -1,4 +1,4 @@
-package com.gordeev.onlinestore.web.servlet;
+package com.gordeev.onlinestore.web.servlet.assets;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

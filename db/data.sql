@@ -22,6 +22,6 @@ INSERT INTO `product` (`name`, `price`, `description`, `group_id`, `img_link`) V
 INSERT INTO `product` (`name`, `price`, `description`, `group_id`, `img_link`) VALUES
 ('Боржоми', 8.33, 'Минеральная вода', 3, 'https://i.ytimg.com/vi/OorKzprjVRg/hqdefault.jpg');
 
-INSERT INTO `user` (`id`, `name`, `password`) VALUES ('1', 'admin', 'admin');
-INSERT INTO `user` (`id`, `name`, `password`) VALUES ('2', 'user', 'user');
-INSERT INTO `user` (`id`, `name`, `password`) VALUES ('3', 'user2', 'user2');
+INSERT INTO `user` (`id`, `name`, `password`, `role`) VALUES ('1', 'admin', 'admin', 'ADMIN');
+INSERT INTO `user` (`id`, `name`, `password`, `role`) VALUES ('2', 'user', 'user', 'USER');
+INSERT INTO `user` (`id`, `name`, `password`, `role`) VALUES ('3', 'user2', 'user2', 'USER');

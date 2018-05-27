@@ -5,6 +5,7 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.ProductService;
+import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class AddToCartPageServlet extends HttpServlet {
 
         if (idString!=null){
             Product product = productService.getById(Integer.parseInt(idString));
-            Session session = securityService.getSession(request);
+            Session session = securityService.getSession(ServletUtils.getToken(request));
             session.addToCart(product);
         }
 

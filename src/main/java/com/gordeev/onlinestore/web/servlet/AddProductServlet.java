@@ -1,6 +1,7 @@
 package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
+import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
@@ -22,19 +23,18 @@ public class AddProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
 
-        String userName = securityService.getName(request);
-        if (userName != null){
-            pageVariables.put("userName", userName);
+        User user = securityService.getUser(ServletUtils.getToken(request));
+        if (user != null){
+            pageVariables.put("userName", user.getUserName());
         }
 
         response.setContentType("text/html;charset=utf-8");
-        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(PageGenerator.instance().getPage("addProduct.html", pageVariables));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Product product = ServletUtils.createProductFromRequest(request);
+        Product product = ServletUtils.getProductFromRequest(request);
 
         productService.add(product);
 

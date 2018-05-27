@@ -12,7 +12,7 @@ public class Session {
     private User user;
     private LocalDateTime expiredTime;
     private String token;
-    private List<Product> cart = new ArrayList<>(); // кол-во продуктов в корзине не учтено!!!
+    private List<Product> cart = new ArrayList<>();
 
     public User getUser() {
         return user;

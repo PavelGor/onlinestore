@@ -1,15 +1,12 @@
 package com.gordeev.onlinestore.web.servlet.utils;
 
 import com.gordeev.onlinestore.entity.Product;
-import com.gordeev.onlinestore.locator.ServiceLocator;
-import com.gordeev.onlinestore.security.SecurityService;
-import com.gordeev.onlinestore.security.Session;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class ServletUtils {
-    public static Product createProductFromRequest(HttpServletRequest request) {
+    public static Product getProductFromRequest(HttpServletRequest request) {
         String idString = request.getParameter("id");
         String name = request.getParameter("name");
         String priceString = request.getParameter("price");
@@ -30,8 +27,20 @@ public class ServletUtils {
         product.setPrice(price);
         product.setDescription(description);
         product.setImgLink(imgLink);
-        product.setProductGroup("Сок"); //TODO: допилить работу с группой продукта
+        product.setProductGroup("Сок");
 
         return product;
+    }
+    public static String getToken(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("user-token")) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }

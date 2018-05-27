@@ -1,9 +1,11 @@
 package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
+import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
+import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
 
 import javax.servlet.http.HttpServlet;
@@ -25,18 +27,12 @@ public class ProductsServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
         response.setContentType("text/html;charset=utf-8");
 
-        String userName = securityService.getName(request);
-        if (userName != null){
-            pageVariables.put("userName", userName);
+        User user = securityService.getUser(ServletUtils.getToken(request));
+        if (user != null){
+            pageVariables.put("userName", user.getUserName());
         }
 
-        if (productList == null || productList.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            response.setStatus(HttpServletResponse.SC_OK);
-        }
-
-        pageVariables.put("productList", productList == null ? "" : productList);
+        pageVariables.put("productList", productList);
 
         response.getWriter().println(PageGenerator.instance().getPage("products.html", pageVariables));
     }
