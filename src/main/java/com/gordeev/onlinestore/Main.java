@@ -11,15 +11,23 @@ import com.gordeev.onlinestore.web.servlet.*;
 import com.gordeev.onlinestore.web.servlet.assets.AssetsServlet;
 import com.gordeev.onlinestore.web.servlet.security.LogoutServlet;
 import com.gordeev.onlinestore.web.servlet.security.LoginServlet;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.DispatcherType;
+import javax.sql.DataSource;
 import java.util.EnumSet;
 
 public class Main {
     public static void main(String[] args) throws Exception{
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
+        dataSource.setUser("root");
+        dataSource.setPassword("root");
+        ServiceLocator.register("dataSource", dataSource);
+
         ServiceLocator.register("productDao", new JdbcProductDao());
         ServiceLocator.register("userDao", new JdbcUserDao());
         ServiceLocator.register("userService", new UserService());
