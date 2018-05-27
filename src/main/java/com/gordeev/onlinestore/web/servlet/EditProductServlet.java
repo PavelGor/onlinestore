@@ -7,6 +7,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditProductServlet extends HttpServlet {
-
+    private static final Logger LOG = LoggerFactory.getLogger(EditProductServlet.class);
     private ProductService productService = ProductService.getInstance();
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
@@ -42,6 +44,8 @@ public class EditProductServlet extends HttpServlet {
         Product product = ServletUtils.getProductFromRequest(request);
 
         productService.edit(product);
+
+        LOG.info("Product edited in DB: " + product.toString());
 
         response.sendRedirect("/products");
     }

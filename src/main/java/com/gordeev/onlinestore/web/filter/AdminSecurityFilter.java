@@ -5,6 +5,8 @@ import com.gordeev.onlinestore.entity.UserRole;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminSecurityFilter implements Filter {
+    private static final Logger LOG = LoggerFactory.getLogger(AdminSecurityFilter.class);
     @Override
     public void init(FilterConfig filterConfig) {
 
@@ -23,13 +26,15 @@ public class AdminSecurityFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
         boolean isAuth = false;
+        User user;
 
         String token = ServletUtils.getToken(httpServletRequest);
 
         if (token != null) {
-            User user = securityService.getUser(token);
+            user = securityService.getUser(token);
             if (user != null && (user.getRole() == UserRole.ADMIN)) {
                 isAuth = true;
+                LOG.info("Security: user " + user.getUserName() + " got access rights to " + ((HttpServletRequest) request).getRequestURI());
             }
         }
 
@@ -37,6 +42,7 @@ public class AdminSecurityFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             httpServletResponse.sendRedirect("/login");
+            LOG.info("Security: user don't have rights for this operation - so rejected");
         }
     }
 

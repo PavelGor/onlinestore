@@ -3,6 +3,8 @@ package com.gordeev.onlinestore.web.servlet.security;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class LogoutServlet extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -24,6 +27,7 @@ public class LogoutServlet extends HttpServlet {
                     List sessionList = securityService.getSessionList();
                     Session session = securityService.getSession(cookie.getValue());
                     sessionList.remove(session);
+                    LOG.info("User: " + session.getUser().getUserName() + " logout");
                     break;
                 }
             }

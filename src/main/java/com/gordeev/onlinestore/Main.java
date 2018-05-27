@@ -15,23 +15,29 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
 import java.util.EnumSet;
 
 public class Main {
+    static final Logger LOG = LoggerFactory.getLogger(Main.class);
     public static void main(String[] args) throws Exception{
+
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
         dataSource.setUser("root");
         dataSource.setPassword("root");
         ServiceLocator.register("dataSource", dataSource);
+        LOG.info("Main: got connection to database");
 
         ServiceLocator.register("productDao", new JdbcProductDao());
         ServiceLocator.register("userDao", new JdbcUserDao());
         ServiceLocator.register("userService", new UserService());
         ServiceLocator.register("securityService", new SecurityService());
+        LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new ProductsServlet()), "/products");
@@ -54,5 +60,6 @@ public class Main {
         server.setHandler(context);
 
         server.start();
+        LOG.info("Main: server started");
     }
 }

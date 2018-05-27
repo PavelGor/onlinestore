@@ -7,6 +7,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
-
+    private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
     @Override
@@ -31,6 +33,7 @@ public class CartPageServlet extends HttpServlet {
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
             pageVariables.put("userName", user.getUserName());
+            LOG.info("User: " + user.getUserName() + " enter to his cart");
         }
 
         pageVariables.put("productList", productList);

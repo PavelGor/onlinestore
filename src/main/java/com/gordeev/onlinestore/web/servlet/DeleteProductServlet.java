@@ -7,6 +7,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DeleteProductServlet extends HttpServlet {
-
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteProductServlet.class);
     private ProductService productService = ProductService.getInstance();
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
@@ -42,6 +44,8 @@ public class DeleteProductServlet extends HttpServlet {
         Product product = ServletUtils.getProductFromRequest(request);
 
         productService.delete(product);
+
+        LOG.info("Product deleted from DB: " + product.toString());
 
         response.sendRedirect("/products");
     }

@@ -6,6 +6,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddToCartPageServlet extends HttpServlet {
-
+    private static final Logger LOG = LoggerFactory.getLogger(AddToCartPageServlet.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
     private ProductService productService = ProductService.getInstance();
 
@@ -25,6 +27,8 @@ public class AddToCartPageServlet extends HttpServlet {
             Product product = productService.getById(Integer.parseInt(idString));
             Session session = securityService.getSession(ServletUtils.getToken(request));
             session.addToCart(product);
+
+            LOG.info("User: " +session.getUser().getUserName() + " add product: " + product.toString() + " to his cart");
         }
 
         response.sendRedirect("/products");

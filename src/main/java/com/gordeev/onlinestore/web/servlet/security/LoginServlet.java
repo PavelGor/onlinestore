@@ -6,6 +6,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.UserService;
 import com.gordeev.onlinestore.web.templater.PageGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
+    private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private UserService userService = (UserService) ServiceLocator.getService("userService");
     private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
 
@@ -50,6 +53,7 @@ public class LoginServlet extends HttpServlet {
             cookie.setMaxAge(MAX_AGE_SESSION);
             response.addCookie(cookie);
             response.sendRedirect("/products");
+            LOG.info("User: " + user.getUserName() + " login");
         } else {
             response.sendRedirect("/login");
         }
