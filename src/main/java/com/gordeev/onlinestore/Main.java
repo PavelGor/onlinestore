@@ -57,7 +57,9 @@ public class Main {
         context.addFilter(AdminSecurityFilter.class, "/product/delete/*", EnumSet.of(DispatcherType.REQUEST));
 
 
-        Server server = new Server(8080);
+        String portStr = System.getenv("PORT");
+        int port = portStr == null ? 8080 : Integer.valueOf(portStr);
+        Server server = new Server(port);
         server.setHandler(context);
 
         server.start();
