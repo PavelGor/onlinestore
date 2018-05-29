@@ -3,7 +3,6 @@ package com.gordeev.onlinestore.entity;
 public class Product {
     private int id;
     private String name;
-    private String productGroup;
     private double price;
     private String description;
     private String imgLink;
@@ -23,14 +22,6 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(String productGroup) {
-        this.productGroup = productGroup;
     }
 
     public double getPrice() {
@@ -62,7 +53,6 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", productGroup=" + productGroup +
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 '}';

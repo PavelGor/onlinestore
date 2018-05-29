@@ -39,14 +39,13 @@ public class JdbcProductDao implements ProductDao{
 
     @Override
     public void add(Product product) {
-        String sql = "INSERT INTO product (name, price, description, group_id, img_link) VALUES ( ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
-            statement.setInt(4, 1);
-            statement.setString(5, product.getImgLink());
+            statement.setString(4, product.getImgLink());
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.trace("add(): ",e);
@@ -73,15 +72,14 @@ public class JdbcProductDao implements ProductDao{
 
     @Override
     public void edit(Product product) {
-        String sql = "UPDATE product SET name = ?, price = ?, description = ?, group_id = ?, img_link = ? WHERE id = ?";
+        String sql = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
-            statement.setInt(4, 1);
-            statement.setString(5, product.getImgLink());
-            statement.setInt(6, product.getId());
+            statement.setString(4, product.getImgLink());
+            statement.setInt(5, product.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             LOG.trace("edit(): ",e);

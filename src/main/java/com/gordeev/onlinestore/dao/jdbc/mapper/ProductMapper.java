@@ -11,7 +11,6 @@ public class ProductMapper {
 
         product.setId(resultSet.getInt("id"));
         product.setName(resultSet.getString("name"));
-        product.setProductGroup("Сок"); //TODO: fix groups
         product.setPrice(resultSet.getDouble("price"));
         product.setDescription(resultSet.getString("description"));
         product.setImgLink(resultSet.getString("img_link"));

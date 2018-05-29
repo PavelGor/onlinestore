@@ -2,7 +2,6 @@ package com.gordeev.onlinestore.service;
 
 import com.gordeev.onlinestore.dao.ProductDao;
 import com.gordeev.onlinestore.entity.Product;
-import com.gordeev.onlinestore.entity.ProductGroup;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 
 import java.util.List;

@@ -73,26 +73,13 @@
                 <div >
                     <img class="product-img" src="${product.imgLink}" alt="Cart image cap">
                 </div>
-
-                <div class="product-description"  style="align-self: center;">
-                    <div class="name">
-                        ${product.name}
-                    </div>
-                    <div class="row price-qty justify-content-between">
-                        <div class="col-6 price">
-                            <p class="card-text">Цена: ${product.price} грн</p>
-                        </div>
-                        <div class="col-6 qty">
-                            Кол-во: 1 шт.
-                        </div>
-                    </div>
+                <div class="product-name">
+                    ${product.name}
                 </div>
-
                 <div class="product-value" style="align-self: center">
                     Стоимость: ${product.price} грн
                 </div>
-
-                <div class="delete-btn" style="align-self: center" >
+                <div class="delete-btn">
                     <a href="product/delete/?id=${product.id}" class="btn btn-outline-danger" >Delete</a>
                 </div>
             </div>
@@ -102,8 +89,14 @@
                 <div class="col-6 order-btn">
                     <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
                 </div>
-                <div class="col-6 cart-value">
-                    Итого:
+
+                <#assign totalSum = 0>
+                <#list productList as product>
+                <#assign totalSum = totalSum + product.price>
+                </#list>
+
+                <div class="col-6 cart-value text-center">
+                    Итого: ${totalSum} грн
                 </div>
             </div>
         </form>

@@ -27,7 +27,6 @@ public class ServletUtils {
         product.setPrice(price);
         product.setDescription(description);
         product.setImgLink(imgLink);
-        product.setProductGroup("Сок");
 
         return product;
     }
