@@ -1,1 +1,1 @@
-web: java -jar target/onlinestore-1.0-SNAPSHOT.jar
+web: java -jar target/os-jar-with-dependencies.jar
