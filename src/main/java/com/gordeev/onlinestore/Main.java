@@ -62,9 +62,17 @@ public class Main {
 
         server.start();
         System.getProperties().forEach((o, o2) -> {
-            LOG.info("{}:{}", o, o2);
+            LOG.info("{}      :{}", o, o2);
         });
 
+        LOG.info("==================");
+        System.getenv().forEach((o, o2) -> {
+            LOG.info("{}:{}", o, o2);
+        });
+        LOG.info("==================");
+
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        LOG.info("{}:{}", "JDBC_DATABASE_URL", dbUrl);
         LOG.info("Main: server started");
     }
 }
