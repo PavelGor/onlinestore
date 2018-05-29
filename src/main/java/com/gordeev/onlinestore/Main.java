@@ -24,7 +24,8 @@ import java.util.EnumSet;
 
 public class Main {
     static final Logger LOG = LoggerFactory.getLogger(Main.class);
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws Exception {
 
         MysqlDataSource dataSource = new MysqlDataSource();
         dataSource.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
@@ -60,6 +61,10 @@ public class Main {
         server.setHandler(context);
 
         server.start();
+        System.getProperties().forEach((o, o2) -> {
+            LOG.info("{}:{}", o, o2);
+        });
+
         LOG.info("Main: server started");
     }
 }
