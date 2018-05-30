@@ -21,7 +21,7 @@ public class PageGenerator {
     public String getPage(String filename, Map<String, Object> data) {
         File file = new File("webapp/os-jar-with-dependencies.jar!",filename);
         Writer stream = new StringWriter();
-        try {
+        try { //ddd
             String filePath;
             filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
             filePath = filePath.substring(filePath.indexOf("target"));
