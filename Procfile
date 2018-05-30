@@ -1,1 +1,1 @@
-web: java -jar target/os-jar-with-dependencies.jar
+web: java -cp target/os-jar-with-dependencies.jar com.gordeev.onlinestore.Main

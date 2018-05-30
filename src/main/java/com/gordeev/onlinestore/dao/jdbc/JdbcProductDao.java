@@ -90,7 +90,7 @@ public class JdbcProductDao implements ProductDao{
     //по хорошему удалять продукты из БД нельзя - история, необходимо ставить статус неактивен. Но похоже всё зависит от ТЗ
     @Override
     public void delete(Product product) {
-        String sql = "DELETE FROM `product` WHERE `id`= ?;";
+        String sql = "DELETE FROM product WHERE id= ?;";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, product.getId());

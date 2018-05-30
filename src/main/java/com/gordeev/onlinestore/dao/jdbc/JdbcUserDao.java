@@ -21,7 +21,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getByName(String name) {
         User user = null;
-        String sql = "SELECT * FROM user WHERE name = " + "'" + name + "'";
+        String sql = "SELECT * FROM users WHERE name = " + "'" + name + "'";
         try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)){
