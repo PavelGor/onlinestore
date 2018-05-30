@@ -19,7 +19,7 @@ public class PageGenerator {
     }
 
     public String getPage(String filename, Map<String, Object> data) {
-        File file = new File("../os-jar-with-dependencies.jar!/webapp/templates",filename);
+        File file = new File("webapp/os-jar-with-dependencies.jar!",filename);
         Writer stream = new StringWriter();
         try {
             String filePath;
