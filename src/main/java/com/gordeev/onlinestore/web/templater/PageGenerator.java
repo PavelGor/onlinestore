@@ -25,7 +25,10 @@ public class PageGenerator {
             String filePath;
             filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
             filePath = filePath.substring(filePath.indexOf("target"));
-            Template template = cfg.getTemplate(filePath);
+            cfg.setClassForTemplateLoading(getClass(), "/webapp/templates");
+
+            //Template template = cfg.getTemplate(filePath);
+            Template template = cfg.getTemplate(filename);
             template.process(data, stream);
         } catch (IOException | TemplateException | NullPointerException e) {
             throw new RuntimeException(e);
