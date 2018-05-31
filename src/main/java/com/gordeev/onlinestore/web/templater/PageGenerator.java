@@ -19,12 +19,12 @@ public class PageGenerator {
     }
 
     public String getPage(String filename, Map<String, Object> data) {
-        File file = new File("../webapp/templates",filename);
+        File file = new File("webapp/templates",filename);
         Writer stream = new StringWriter();
         try {
-            String filePath = "target/os-jar-with-dependencies.jar!/webapp/templates/" + filename;
-            //filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
-            //filePath = filePath.substring(filePath.indexOf("target"));
+            String filePath;
+            filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
+            filePath = filePath.substring(filePath.indexOf("target"));
             Template template = cfg.getTemplate(filePath);
             template.process(data, stream);
         } catch (IOException | TemplateException | NullPointerException e) {

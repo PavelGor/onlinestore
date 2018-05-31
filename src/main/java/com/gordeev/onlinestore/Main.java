@@ -11,6 +11,7 @@ import com.gordeev.onlinestore.web.servlet.*;
 import com.gordeev.onlinestore.web.servlet.assets.AssetsServlet;
 import com.gordeev.onlinestore.web.servlet.security.LoginServlet;
 import com.gordeev.onlinestore.web.servlet.security.LogoutServlet;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -37,23 +38,31 @@ public class Main {
         //password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700
         //user=tbgmqcmkgywulg
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
-        String serverName;
+        BasicDataSource dataSource = new BasicDataSource();
         LOG.info("{}:{}", "JDBC_DATABASE_URL", dbUrl);
+
         if (dbUrl != null) {
             dbUrl += "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
+            dataSource.setUrl(dbUrl);
+            ServiceLocator.register("dataSource", dataSource);
         } else {
-           // dbUrl = "jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg" +
-             //       "&password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
-        }
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(dbUrl);
-//        dataSource.setDataSourceName("dataSource");
-//        dataSource.setServerName("ec2-54-83-59-120.compute-1.amazonaws.com");
-//        dataSource.setDatabaseName("dq8c66cefkrh4");
-//        dataSource.setUser("tbgmqcmkgywulg");
-//        dataSource.setPassword("c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700");
+            MysqlDataSource dataSourceMysql = new MysqlDataSource();
+            dataSourceMysql.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
+            dataSourceMysql.setUser("root");
+            dataSourceMysql.setPassword("root");
+            ServiceLocator.register("dataSource", dataSourceMysql);
+            //dataSource.setDataSourceName("dataSource");
+            //dataSource.setServerName("ec2-54-83-59-120.compute-1.amazonaws.com");
+            //dataSource.setDatabaseName("dq8c66cefkrh4");
+            //dataSource.setUser("tbgmqcmkgywulg");
+            //dataSource.setPassword("c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700");
 
-        ServiceLocator.register("dataSource", dataSource);
+            // dbUrl = "jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg" +
+            //       "&password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
+        }
+
+
+
         LOG.info("Main: got connection to database");
 
         ServiceLocator.register("productDao", new JdbcProductDao());
@@ -63,7 +72,7 @@ public class Main {
         LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new ProductsServlet()), "/products");
+        context.addServlet(new ServletHolder(new ProductsServlet()), "/");
         context.addServlet(new ServletHolder(new AddProductServlet()), "/product/add");
         context.addServlet(new ServletHolder(new EditProductServlet()), "/product/edit/*");
         context.addServlet(new ServletHolder(new LoginServlet()), "/login");
