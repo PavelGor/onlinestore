@@ -23,20 +23,11 @@ import javax.servlet.DispatcherType;
 import java.util.EnumSet;
 
 public class Main {
-    static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        /*
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
-        dataSource.setUser("root");
-        dataSource.setPassword("root");
-        */
-
-        // jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg
-        // &password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require
-        //password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700
-        //user=tbgmqcmkgywulg
+        // dbUrl = "jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg" +
+        //       "&password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         BasicDataSource dataSource = new BasicDataSource();
         LOG.info("{}:{}", "JDBC_DATABASE_URL", dbUrl);
@@ -51,17 +42,7 @@ public class Main {
             dataSourceMysql.setUser("root");
             dataSourceMysql.setPassword("root");
             ServiceLocator.register("dataSource", dataSourceMysql);
-            //dataSource.setDataSourceName("dataSource");
-            //dataSource.setServerName("ec2-54-83-59-120.compute-1.amazonaws.com");
-            //dataSource.setDatabaseName("dq8c66cefkrh4");
-            //dataSource.setUser("tbgmqcmkgywulg");
-            //dataSource.setPassword("c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700");
-
-            // dbUrl = "jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg" +
-            //       "&password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
         }
-
-
 
         LOG.info("Main: got connection to database");
 
@@ -87,7 +68,6 @@ public class Main {
         context.addFilter(AdminSecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(AdminSecurityFilter.class, "/product/delete/*", EnumSet.of(DispatcherType.REQUEST));
 
-
         String portStr = System.getenv("PORT");
         int port = portStr == null ? 8080 : Integer.valueOf(portStr);
 
@@ -97,20 +77,7 @@ public class Main {
         server.setHandler(context);
 
         server.start();
-        /*
-        System.getProperties().forEach((o, o2) -> {
-            LOG.info("{}      :{}", o, o2);
-        });
-
-        LOG.info("==================");
-        System.getenv().forEach((o, o2) -> {
-            LOG.info("{}:{}", o, o2);
-        });
-        LOG.info("==================");
-*/
-
 
         LOG.info("Main: server started");
-
     }
 }

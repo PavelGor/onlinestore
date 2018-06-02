@@ -19,15 +19,9 @@ public class PageGenerator {
     }
 
     public String getPage(String filename, Map<String, Object> data) {
-        File file = new File("webapp/templates",filename);
         Writer stream = new StringWriter();
         try {
-            String filePath;
-            filePath = getClass().getClassLoader().getResource(file.getPath().replace("\\","/")).getPath();
-            filePath = filePath.substring(filePath.indexOf("target"));
             cfg.setClassForTemplateLoading(getClass(), "/webapp/templates");
-
-            //Template template = cfg.getTemplate(filePath);
             Template template = cfg.getTemplate(filename);
             template.process(data, stream);
         } catch (IOException | TemplateException | NullPointerException e) {
