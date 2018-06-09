@@ -11,27 +11,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class LogoutServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("user-token")) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
-                    List sessionList = securityService.getSessionList();
-                    Session session = securityService.getSession(cookie.getValue());
-                    sessionList.remove(session);
+                    String token = cookie.getValue();
+                    Session session = securityService.getSession(token);
+
                     LOG.info("User: " + session.getUser().getUserName() + " logout");
+                    securityService.removeSession(token);
+
                     break;
                 }
             }
         }
-        response.sendRedirect("/products");
+        response.sendRedirect("/");
     }
 }

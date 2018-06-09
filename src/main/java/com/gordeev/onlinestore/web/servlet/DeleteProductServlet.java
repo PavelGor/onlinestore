@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class DeleteProductServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(DeleteProductServlet.class);
-    private ProductService productService = ProductService.getInstance();
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -35,7 +35,6 @@ public class DeleteProductServlet extends HttpServlet {
         }
 
         pageVariables.put("product", product);
-        response.setContentType("text/html;charset=utf-8");
         response.getWriter().println(PageGenerator.instance().getPage("delete.html", pageVariables));
     }
 
@@ -47,6 +46,6 @@ public class DeleteProductServlet extends HttpServlet {
 
         LOG.info("Product deleted from DB: " + product.toString());
 
-        response.sendRedirect("/products");
+        response.sendRedirect("/");
     }
 }

@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class EditProductServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(EditProductServlet.class);
-    private ProductService productService = ProductService.getInstance();
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -35,7 +35,6 @@ public class EditProductServlet extends HttpServlet {
         }
 
         pageVariables.put("product", product);
-        response.setContentType("text/html;charset=utf-8");
         response.getWriter().println(PageGenerator.instance().getPage("edit.html", pageVariables));
     }
 
@@ -47,6 +46,6 @@ public class EditProductServlet extends HttpServlet {
 
         LOG.info("Product edited in DB: " + product.toString());
 
-        response.sendRedirect("/products");
+        response.sendRedirect("/");
     }
 }

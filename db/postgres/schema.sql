@@ -10,7 +10,7 @@ CREATE TABLE product(
   img_link VARCHAR(145) NOT NULL
   );
 
-CREATE TABLE "users" (
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL,

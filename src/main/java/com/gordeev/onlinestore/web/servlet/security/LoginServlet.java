@@ -19,26 +19,23 @@ import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
-    private UserService userService = (UserService) ServiceLocator.getService("userService");
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private UserService userService = (UserService) ServiceLocator.getService(UserService.class);
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=utf-8");
         response.getWriter().println(PageGenerator.instance().getPage("login.html"));
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;charset=utf-8");
         int MAX_AGE_SESSION = 300;
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
-        User user = userService.autenticate(login, password);
-
-        if (user != null){
+        try {
+            User user = userService.autenticate(login, password);
             String token = UUID.randomUUID().toString();
 
             Session session = new Session();
@@ -47,15 +44,16 @@ public class LoginServlet extends HttpServlet {
 
             LocalDateTime time = LocalDateTime.now().plusSeconds(MAX_AGE_SESSION);
             session.setExpiredTime(time);
-            securityService.getSessionList().add(session);
+            securityService.add(session);
 
             Cookie cookie = new Cookie("user-token", token);
             cookie.setMaxAge(MAX_AGE_SESSION);
             response.addCookie(cookie);
-            response.sendRedirect("/products");
-            LOG.info("User: " + user.getUserName() + " login");
-        } else {
+            response.sendRedirect("/");
+            LOG.info("User: " + user.getUserName() + " logged in");
+        } catch (IllegalAccessException e) {
             response.sendRedirect("/login");
+            e.printStackTrace();
         }
     }
 }

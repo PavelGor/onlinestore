@@ -1,17 +1,20 @@
 package com.gordeev.onlinestore;
 
+import com.gordeev.onlinestore.dao.ProductDao;
+import com.gordeev.onlinestore.dao.UserDao;
 import com.gordeev.onlinestore.dao.jdbc.JdbcProductDao;
 import com.gordeev.onlinestore.dao.jdbc.JdbcUserDao;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
+import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.service.UserService;
 import com.gordeev.onlinestore.web.filter.AdminSecurityFilter;
+import com.gordeev.onlinestore.web.filter.ContentTypeFilter;
 import com.gordeev.onlinestore.web.filter.UserSecurityFilter;
 import com.gordeev.onlinestore.web.servlet.*;
 import com.gordeev.onlinestore.web.servlet.assets.AssetsServlet;
 import com.gordeev.onlinestore.web.servlet.security.LoginServlet;
 import com.gordeev.onlinestore.web.servlet.security.LogoutServlet;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -20,36 +23,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
+import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.EnumSet;
+import java.util.Properties;
 
 public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        // dbUrl = "jdbc:postgresql://ec2-54-83-59-120.compute-1.amazonaws.com:5432/dq8c66cefkrh4?user=tbgmqcmkgywulg" +
-        //       "&password=c13d443a4dc2547fb82fcf6b42926a3c2c549f87c24b8d657b0669a154ec7700&sslmode=require&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
         BasicDataSource dataSource = new BasicDataSource();
         LOG.info("{}:{}", "JDBC_DATABASE_URL", dbUrl);
 
         if (dbUrl != null) {
             dbUrl += "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
-            dataSource.setUrl(dbUrl);
-            ServiceLocator.register("dataSource", dataSource);
         } else {
-            MysqlDataSource dataSourceMysql = new MysqlDataSource();
-            dataSourceMysql.setURL("jdbc:mysql://localhost/onlinestore?useUnicode=true&characterEncoding=UTF8");
-            dataSourceMysql.setUser("root");
-            dataSourceMysql.setPassword("root");
-            ServiceLocator.register("dataSource", dataSourceMysql);
+            Properties properties = new Properties();
+            try {
+                properties.load(new FileInputStream("application.properties"));
+            } catch (IOException e) {
+                e.printStackTrace();
+                LOG.info("bad file or properties in it");
+            }
+            dbUrl = properties.getProperty("url");
         }
+
+        dataSource.setUrl(dbUrl);
+        ServiceLocator.register(DataSource.class, dataSource);
 
         LOG.info("Main: got connection to database");
 
-        ServiceLocator.register("productDao", new JdbcProductDao());
-        ServiceLocator.register("userDao", new JdbcUserDao());
-        ServiceLocator.register("userService", new UserService());
-        ServiceLocator.register("securityService", new SecurityService());
+        ServiceLocator.register(ProductDao.class, new JdbcProductDao());
+        ServiceLocator.register(UserDao.class, new JdbcUserDao());
+        ServiceLocator.register(UserService.class, new UserService());
+        ServiceLocator.register(ProductService.class, new ProductService());
+        ServiceLocator.register(SecurityService.class, new SecurityService());
         LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -63,6 +73,7 @@ public class Main {
         context.addServlet(new ServletHolder(new AddToCartPageServlet()), "/product/cart/*");
         context.addServlet(new ServletHolder(new AssetsServlet()), "/assets/*");
 
+        context.addFilter(ContentTypeFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(UserSecurityFilter.class, "/cart", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(AdminSecurityFilter.class, "/product/add/*", EnumSet.of(DispatcherType.REQUEST));
         context.addFilter(AdminSecurityFilter.class, "/product/edit/*", EnumSet.of(DispatcherType.REQUEST));

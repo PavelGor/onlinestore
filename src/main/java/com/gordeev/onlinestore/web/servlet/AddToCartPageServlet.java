@@ -16,11 +16,11 @@ import java.io.IOException;
 
 public class AddToCartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(AddToCartPageServlet.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
-    private ProductService productService = ProductService.getInstance();
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String idString = request.getParameter("id");
 
         if (idString!=null){
@@ -28,9 +28,9 @@ public class AddToCartPageServlet extends HttpServlet {
             Session session = securityService.getSession(ServletUtils.getToken(request));
             session.addToCart(product);
 
-            LOG.info("User: " +session.getUser().getUserName() + " add product: " + product.toString() + " to his cart");
+            LOG.info("User: " +session.getUser().getUserName() + " add product: " + product + " to his cart");
         }
 
-        response.sendRedirect("/products");
+        response.sendRedirect("/");
     }
 }

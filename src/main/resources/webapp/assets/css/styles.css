@@ -22,7 +22,7 @@
 .product{
     background-color: #f8f9fa;
     margin:10px;
-    align-self: center
+    align-self: center;
 }
 .product-img{
     width:250px;
@@ -35,3 +35,4 @@
 .product-name{
     align-self: center
 }
+

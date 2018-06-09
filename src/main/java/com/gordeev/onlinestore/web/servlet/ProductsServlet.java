@@ -18,14 +18,13 @@ import java.util.Map;
 
 public class ProductsServlet extends HttpServlet {
 
-    private ProductService productService = ProductService.getInstance();
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Product> productList = productService.getAll();
         Map<String, Object> pageVariables = new HashMap<>();
-        response.setContentType("text/html;charset=utf-8");
 
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){

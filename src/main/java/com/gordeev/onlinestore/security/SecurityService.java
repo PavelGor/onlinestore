@@ -4,28 +4,27 @@ import com.gordeev.onlinestore.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SecurityService {
-    List<Session> sessionList = new ArrayList<>();
+    private List<Session> sessionList = new ArrayList<>();
 
     public Session getSession(String token) {
-        for (int i = 0; i < sessionList.size(); i++) {
-            Session session = sessionList.get(i);
+        LocalDateTime time = LocalDateTime.now();
+        Iterator<Session> iterator = sessionList.iterator();
+        while (iterator.hasNext()) {
+            Session session = iterator.next();
             if (session.getToken().equals(token)) {
-                LocalDateTime time = LocalDateTime.now();
                 if (time.isBefore(session.getExpiredTime())) {
                     return session;
                 } else {
                     sessionList.remove(session);
+                    return null;
                 }
             }
         }
         return null;
-    }
-
-    public List<Session> getSessionList() {
-        return sessionList;
     }
 
     public User getUser(String token) {
@@ -34,5 +33,13 @@ public class SecurityService {
             return session.getUser();
         }
         return null;
+    }
+
+    public void removeSession(String token) {
+        sessionList.remove(getSession(token));
+    }
+
+    public void add(Session session) {
+        sessionList.add(session);
     }
 }

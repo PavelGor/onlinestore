@@ -19,7 +19,7 @@ public class JdbcProductDao implements ProductDao{
 
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
 
-    private DataSource dataSource = (DataSource) ServiceLocator.getService("dataSource");
+    private DataSource dataSource = (DataSource) ServiceLocator.getService(DataSource.class);
 
     @Override
     public List<Product> getAll() {

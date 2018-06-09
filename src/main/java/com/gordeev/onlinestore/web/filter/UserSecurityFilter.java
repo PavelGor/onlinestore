@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class UserSecurityFilter implements Filter{
     private static final Logger LOG = LoggerFactory.getLogger(UserSecurityFilter.class);
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
     @Override
     public void init(FilterConfig filterConfig) {
 
@@ -24,7 +25,7 @@ public class UserSecurityFilter implements Filter{
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+
         boolean isAuth = false;
 
         String token = ServletUtils.getToken(httpServletRequest);

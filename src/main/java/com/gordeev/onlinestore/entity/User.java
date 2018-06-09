@@ -3,11 +3,13 @@ package com.gordeev.onlinestore.entity;
 public class User {
     private String userName;
     private String password;
+    private String sole;
     private UserRole role;
 
-    public User(String userName, String password, UserRole role) {
+    public User(String userName, String password, String sole, UserRole role) {
         this.userName = userName;
         this.password = password;
+        this.sole = sole;
         this.role = role;
     }
 
@@ -29,6 +31,14 @@ public class User {
 
     public UserRole getRole() {
         return role;
+    }
+
+    public String getSole() {
+        return sole;
+    }
+
+    public void setSole(String sole) {
+        this.sole = sole;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class JdbcUserDao implements UserDao {
 
     private static final UserMapper USER_MAPPER = new UserMapper();
 
-    private DataSource dataSource = (DataSource) ServiceLocator.getService("dataSource");
+    private DataSource dataSource = (DataSource) ServiceLocator.getService(DataSource.class);
 
     @Override
     public User getByName(String name) {

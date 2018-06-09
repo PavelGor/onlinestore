@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService("securityService");
+    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -28,7 +28,6 @@ public class CartPageServlet extends HttpServlet {
         List<Product> productList = session.getCart();
 
         Map<String, Object> pageVariables = new HashMap<>();
-        response.setContentType("text/html;charset=utf-8");
 
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){

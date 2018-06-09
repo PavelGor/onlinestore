@@ -7,14 +7,9 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 import java.util.List;
 
 public class ProductService {
-    private ProductDao productDao = (ProductDao) ServiceLocator.getService("productDao");
-    private final static ProductService INSTANCE = new ProductService();
+    private ProductDao productDao =  ServiceLocator.getService(ProductDao.class);
 
     public ProductService() {
-    }
-
-    public static ProductService getInstance() {
-        return INSTANCE;
     }
 
     public List<Product> getAll(){
