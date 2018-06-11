@@ -5,6 +5,10 @@
     background-color: #f8f9fa;
     margin-top:10px;
 }
+footer{
+    bottom: 0;
+    width: 100%;
+}
 .admin-btn{
     width:75px;
     margin:5px;
@@ -30,9 +34,16 @@
 }
 .delete-btn{
     margin:10px;
-    align-self: center
+    align-self: center;
 }
 .product-name{
-    align-self: center
+    align-self: center;
 }
+body {
+    height:100%;
+}
+main {
+    min-height:85vh;
+}
+
 

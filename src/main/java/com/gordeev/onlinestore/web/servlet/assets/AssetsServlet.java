@@ -11,6 +11,7 @@ public class AssetsServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         File file = new File("webapp",req.getRequestURI());
+        resp.setContentType("text/css;charset=utf-8");
 
         try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(file.getPath())){
             byte[] buffer = new byte[8192];
