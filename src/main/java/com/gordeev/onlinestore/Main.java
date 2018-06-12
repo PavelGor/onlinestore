@@ -19,6 +19,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,8 @@ public class Main {
         LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
+        context.setBaseResource(Resource.newClassPathResource("/"));
         context.addServlet(new ServletHolder(new ProductsServlet()), "/");
         context.addServlet(new ServletHolder(new AddProductServlet()), "/product/add");
         context.addServlet(new ServletHolder(new EditProductServlet()), "/product/edit/*");

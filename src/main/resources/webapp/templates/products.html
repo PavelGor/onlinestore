@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+<!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -33,13 +33,9 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <#if userName??>
-                        <#if userName=="admin">
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${userRole=='ADMIN'}">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
-                        </#if>
-                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -49,15 +45,13 @@
                     </form>
                 </div>
                 <div class="row">
-                    <#if userName??>
-                    <form method="post" action="/exit">
-                        <button type="submit" class="btn btn-link">Exit(${userName})</button>
+
+                    <form method="post" action="/exit" th:if="${userRole!=null}">
+                        <button type="submit" class="btn btn-link" th:text="@{Exit:} + ${userName}"></button>
                     </form>
-                    <#else>
-                    <form method="get" action="/login">
+                    <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
-                    </#if>
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                 </div>
             </div>
@@ -67,36 +61,28 @@
 
 <main>
     <div class="container">
-        <div class="row">
-            <#list productList as product>
-            <div class="col-md-3">
+        <div class="row" th:object="${productList}">
+            <div class="col-md-3" th:each="product :${productList}">
                 <div class="card">
-                    <img class="card-img-top card-img" src="${product.imgLink}" alt="Card image cap">
+                    <img class="card-img-top card-img" th:src="@{${product.imgLink}}" alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text">${product.description}</p>
-                        <p class="card-text">Price: ${product.price}</p>
-                        <div>
-                            <#if userName??>
-                            <#if userName=="user">
-                            <form method="post" action="product/cart/?id=${product.id}">
-                                <button type="submit" class="btn btn-primary btn-block" name="id" id="${product.id}">Add to cart</button>
+                        <h5 class="card-title" th:text="${product.name}">name</h5>
+                        <p class="card-text" th:text="${product.description}">description</p>
+                        <p class="card-text" th:text="${product.price}">price</p>
+                        <div th:if="${userRole=='USER'}">
+                            <form method="post" th:action="@{product/cart/?id=} + ${product.id}">
+                                <button type="submit" class="btn btn-primary btn-block" name="id" th:id="${product.id}">Add to cart</button>
                             </form>
-                            </#if>
-                            </#if>
                         </div>
-                        <#if userName??>
-                        <#if userName=="admin">
-                        <div class="admin-btns justify-content-between">
-                            <a href="product/edit/?id=${product.id}" class="btn btn-warning admin-btn">Edit</a>
-                            <a href="product/delete/?id=${product.id}" class="btn btn-danger float-right admin-btn">Delete</a>
+
+                        <div class="admin-btns justify-content-between" th:if="${userRole=='ADMIN'}">
+                            <a th:href="@{|product/edit/?id=${product.id}|}" class="btn btn-warning admin-btn">Edit</a>
+                            <a th:href="@{|product/delete/?id=${product.id}|}" class="btn btn-danger float-right admin-btn">Delete</a>
                         </div>
-                        </#if>
-                        </#if>
+
                     </div>
                 </div>
             </div>
-            </#list>
         </div>
     </div>
 </main>

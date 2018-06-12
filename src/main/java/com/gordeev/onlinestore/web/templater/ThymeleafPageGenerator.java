@@ -1,27 +1,24 @@
 package com.gordeev.onlinestore.web.templater;
 
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
 
-public class ThymeleafAppUtil {
-    private static TemplateEngine templateEngine;
-    static {
-        ServletContextHandler contextHandler= new ServletContextHandler();
-        contextHandler.getServletContext();
+public class ThymeleafPageGenerator {
+    private TemplateEngine templateEngine;
+
+    public TemplateEngine getTemplateEngine(ServletContext servletContext) {
         ServletContextTemplateResolver templateResolver =
-                new ServletContextTemplateResolver(contextHandler.getServletContext());
-        templateResolver.setTemplateMode(TemplateMode.HTML5);
+                new ServletContextTemplateResolver(servletContext);
+        templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setPrefix("/webapp/templates/");
         templateResolver.setSuffix(".html");
-        templateResolver.setCacheTTLMs(3600000L);
+//        templateResolver.setCacheTTLMs(3600000L);
+        //templateResolver.setCharacterEncoding("utf-8");
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
-    }
-    public static TemplateEngine getTemplateEngine() {
         return templateEngine;
     }
 }

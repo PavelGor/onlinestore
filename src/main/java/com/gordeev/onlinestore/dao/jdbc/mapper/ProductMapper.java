@@ -11,7 +11,7 @@ public class ProductMapper {
 
         product.setId(resultSet.getInt("id"));
         product.setName(resultSet.getString("name"));
-        product.setPrice(resultSet.getDouble("price"));
+        product.setPrice((int)(resultSet.getDouble("price")*100)/100.0);
         product.setDescription(resultSet.getString("description"));
         product.setImgLink(resultSet.getString("img_link"));
 

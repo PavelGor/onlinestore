@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+<!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -33,13 +33,9 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <#if userName??>
-                        <#if userName=="admin">
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${userRole=='ADMIN'}">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
-                        </#if>
-                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -49,15 +45,13 @@
                     </form>
                 </div>
                 <div class="row">
-                    <#if userName??>
-                    <form method="post" action="/exit">
-                        <button type="submit" class="btn btn-link">Exit(${userName})</button>
+
+                    <form method="post" action="/exit" th:if="${userRole!=null}">
+                        <button type="submit" class="btn btn-link" th:text="@{Exit:} + ${userName}"></button>
                     </form>
-                    <#else>
-                    <form method="post" action="/login">
+                    <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
-                    </#if>
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                 </div>
             </div>
@@ -75,28 +69,28 @@
                 <label for="name" class="col-sm-2 col-form-label">Наименование</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" required placeholder="name"
-                           value="${product.name}">
+                           th:value="${product.name}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="price" id="price" required placeholder="price"
-                           value="${product.price}">
+                           th:value="${product.price}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="description" class="col-sm-2 col-form-label">Описание:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="description" id="description"
-                           required placeholder="description" value="${product.description}">
+                           required placeholder="description" th:value="${product.description}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="imgLink" id="imgLink" required placeholder="imgLink"
-                           value="${product.imgLink}">
+                           th:value="${product.imgLink}">
                 </div>
             </div>
             <div class="form-group row justify-content-center">

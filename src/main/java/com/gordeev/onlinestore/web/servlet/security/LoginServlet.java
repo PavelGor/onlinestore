@@ -5,10 +5,14 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.UserService;
-import com.gordeev.onlinestore.web.templater.PageGenerator;
+import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +25,21 @@ public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private UserService userService = (UserService) ServiceLocator.getService(UserService.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private TemplateEngine templateEngine;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
+        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().println(PageGenerator.instance().getPage("login.html"));
+        WebContext context = new WebContext(request, response, request.getServletContext(),
+                request.getLocale());
+        String htmlString = templateEngine.process("login", context);
+        response.getWriter().println(htmlString);
     }
 
     @Override

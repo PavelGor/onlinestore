@@ -6,10 +6,14 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
-import com.gordeev.onlinestore.web.templater.PageGenerator;
+import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,17 +25,29 @@ public class AddProductServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(AddProductServlet.class);
     private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private TemplateEngine templateEngine;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
+        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        WebContext context = new WebContext(request, response, request.getServletContext(),
+                request.getLocale());
         Map<String, Object> pageVariables = new HashMap<>();
 
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
             pageVariables.put("userName", user.getUserName());
         }
+        context.setVariables(pageVariables);
 
-        response.getWriter().println(PageGenerator.instance().getPage("addProduct.html", pageVariables));
+        String htmlString = templateEngine.process("addProduct", context);
+        response.getWriter().println(htmlString);
     }
 
     @Override

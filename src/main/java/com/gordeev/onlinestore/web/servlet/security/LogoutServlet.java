@@ -15,6 +15,7 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();

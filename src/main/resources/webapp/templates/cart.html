@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+<!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -33,13 +33,9 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <#if userName??>
-                        <#if userName=="admin">
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${userRole=='ADMIN'}">
                             <a class="nav-link" href="/product/add">Add</a>
                         </li>
-                        </#if>
-                        </#if>
                     </ul>
                 </div>
                 <div class="col-6">
@@ -49,15 +45,13 @@
                     </form>
                 </div>
                 <div class="row">
-                    <#if userName??>
-                    <form method="post" action="/exit">
-                        <button type="submit" class="btn btn-link">Exit(${userName})</button>
+
+                    <form method="post" action="/exit" th:if="${userRole!=null}">
+                        <button type="submit" class="btn btn-link" th:text="@{Exit:} + ${userName}"></button>
                     </form>
-                    <#else>
-                    <form method="post" action="/login">
+                    <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
-                    </#if>
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                 </div>
             </div>
@@ -70,37 +64,29 @@
         <div>
             <h3 class="col-sm-6">Заказать товар:</h3>
         </div>
-        <form method="post">
-
-            <#list productList as product>
-            <div class="row product justify-content-between">
+        <form method="post" th:object="${productList}">
+            <div class="row product justify-content-between" th:each="product :${productList}">
                 <div >
-                    <img class="product-img" src="${product.imgLink}" alt="Cart image cap">
+                    <img class="product-img" th:src="@{${product.imgLink}}" alt="Cart image cap">
                 </div>
-                <div class="product-name">
-                    ${product.name}
+                <div class="product-name" th:text="${product.name}">
+                    name
                 </div>
-                <div class="product-value" style="align-self: center">
-                    Стоимость: ${product.price} грн
+                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${product.price}">
+                    Стоимость: price грн
                 </div>
                 <div class="delete-btn">
-                    <a href="product/delete/?id=${product.id}" class="btn btn-outline-danger" >Delete</a>
+                    <a th:href="@{|product/cart/delete/?id=${product.id}|}" class="btn btn-outline-danger" >Delete</a>
                 </div>
             </div>
-            </#list>
 
             <div class="row">
                 <div class="col-6 order-btn">
                     <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
                 </div>
 
-                <#assign totalSum = 0>
-                <#list productList as product>
-                <#assign totalSum = totalSum + product.price>
-                </#list>
-
-                <div class="col-6 cart-value text-center">
-                    Итого: ${totalSum} грн
+                <div class="col-6 cart-value text-center" th:text="${#aggregates.sum(productList.{price})}">
+                    Итого: totalSum грн
                 </div>
             </div>
         </form>
