@@ -64,6 +64,8 @@ public class Main {
         LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setBaseResource(Resource.newClassPathResource("/src/main/resources"));
+
 
         context.setBaseResource(Resource.newClassPathResource("/"));
         context.addServlet(new ServletHolder(new ProductsServlet()), "/");
