@@ -42,7 +42,7 @@ public class ProductsServlet extends HttpServlet {
 
 
         ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
-        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
+        templateEngine = thymeleafPageGenerator.getTemplateEngine(request.getServletContext());
 
 
         User user = securityService.getUser(ServletUtils.getToken(request));
