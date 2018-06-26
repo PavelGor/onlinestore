@@ -30,8 +30,8 @@ public class ProductsServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-//        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
-//        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
+        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
+        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
     }
 
     @Override
@@ -39,11 +39,6 @@ public class ProductsServlet extends HttpServlet {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
         List<Product> productList = productService.getAll();
         Map<String, Object> pageVariables = new HashMap<>();
-
-
-        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
-        templateEngine = thymeleafPageGenerator.getTemplateEngine(request.getServletContext());
-
 
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
