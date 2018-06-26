@@ -12,7 +12,7 @@ public class ThymeleafPageGenerator {
         ServletContextTemplateResolver templateResolver =
                 new ServletContextTemplateResolver(servletContext);
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/templates/");
+        templateResolver.setPrefix("/webapp/templates/");
         templateResolver.setSuffix(".html");
 //        templateResolver.setCacheTTLMs(3600000L);
         //templateResolver.setCharacterEncoding("utf-8");
