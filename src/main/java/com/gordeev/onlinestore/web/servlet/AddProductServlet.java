@@ -43,6 +43,7 @@ public class AddProductServlet extends HttpServlet {
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
             pageVariables.put("userName", user.getUserName());
+            pageVariables.put("userRole", user.getRole().toString());
         }
         context.setVariables(pageVariables);
 

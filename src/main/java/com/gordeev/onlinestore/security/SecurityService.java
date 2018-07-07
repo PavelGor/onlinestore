@@ -42,4 +42,21 @@ public class SecurityService {
     public void add(Session session) {
         sessionList.add(session);
     }
+
+    public Session getSession(User user) {
+        LocalDateTime time = LocalDateTime.now();
+        Iterator<Session> iterator = sessionList.iterator();
+        while (iterator.hasNext()) {
+            Session session = iterator.next();
+            if (session.getUser().equals(user)) {
+                if (time.isBefore(session.getExpiredTime())) {
+                    return session;
+                } else {
+                    sessionList.remove(session);
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
 }

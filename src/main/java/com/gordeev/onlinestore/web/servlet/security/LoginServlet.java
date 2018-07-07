@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
+    private int MAX_AGE_SESSION = 300;
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private UserService userService = (UserService) ServiceLocator.getService(UserService.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
@@ -44,22 +45,20 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int MAX_AGE_SESSION = 300;
 
         String login = request.getParameter("login");
         String password = request.getParameter("password");
 
         try {
+            String token;
             User user = userService.autenticate(login, password);
-            String token = UUID.randomUUID().toString();
+            Session session = securityService.getSession(user);
 
-            Session session = new Session();
-            session.setUser(user);
-            session.setToken(token);
-
-            LocalDateTime time = LocalDateTime.now().plusSeconds(MAX_AGE_SESSION);
-            session.setExpiredTime(time);
-            securityService.add(session);
+            if(session != null){
+                token = session.getToken();
+            } else {
+                token = createSession(user);
+            }
 
             Cookie cookie = new Cookie("user-token", token);
             cookie.setMaxAge(MAX_AGE_SESSION);
@@ -70,5 +69,19 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("/login");
             e.printStackTrace();
         }
+    }
+
+    private String createSession(User user) {
+        String token = UUID.randomUUID().toString();
+
+        Session session = new Session();
+        session.setUser(user);
+        session.setToken(token);
+
+        LocalDateTime time = LocalDateTime.now().plusSeconds(MAX_AGE_SESSION);
+        session.setExpiredTime(time);
+        securityService.add(session);
+
+        return token;
     }
 }

@@ -45,6 +45,7 @@ public class CartPageServlet extends HttpServlet {
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
             pageVariables.put("userName", user.getUserName());
+            pageVariables.put("userRole", user.getRole().toString()); //TODO: kill toString?
             LOG.info("User: " + user.getUserName() + " enter to his cart");
         }
 

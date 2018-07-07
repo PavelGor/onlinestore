@@ -45,6 +45,7 @@ public class DeleteProductServlet extends HttpServlet {
         User user = securityService.getUser(ServletUtils.getToken(request));
         if (user != null){
             pageVariables.put("userName", user.getUserName());
+            pageVariables.put("userRole", user.getRole().toString());
         }
 
         pageVariables.put("product", product);
