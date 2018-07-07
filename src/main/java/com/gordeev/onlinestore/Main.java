@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.DispatcherType;
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Properties;
@@ -43,7 +42,7 @@ public class Main {
         } else {
             Properties properties = new Properties();
             try {
-                properties.load(new FileInputStream("application.properties"));
+                properties.load(Main.class.getClassLoader().getResourceAsStream("application.properties"));
             } catch (IOException e) {
                 e.printStackTrace();
                 LOG.info("bad file or properties in it");
