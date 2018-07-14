@@ -11,29 +11,20 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
-    private int MAX_AGE_SESSION = 300;
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private UserService userService = (UserService) ServiceLocator.getService(UserService.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
-    private TemplateEngine templateEngine;
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
-        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
-    }
+    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -52,22 +43,21 @@ public class LoginServlet extends HttpServlet {
         try {
             String token;
             User user = userService.autenticate(login, password);
-            Session session = securityService.getSession(user);
+            Optional<Session> optionalSession = securityService.getSession(user);
 
-            if(session != null){
-                token = session.getToken();
+            if(optionalSession.isPresent()){
+                token = optionalSession.get().getToken();
             } else {
                 token = createSession(user);
             }
 
             Cookie cookie = new Cookie("user-token", token);
-            cookie.setMaxAge(MAX_AGE_SESSION);
+            cookie.setMaxAge(securityService.getSessionMaxLifeTime());
             response.addCookie(cookie);
             response.sendRedirect("/");
             LOG.info("User: " + user.getUserName() + " logged in");
-        } catch (IllegalAccessException e) {
+        } catch (SecurityException e) {
             response.sendRedirect("/login");
-            e.printStackTrace();
         }
     }
 
@@ -78,8 +68,8 @@ public class LoginServlet extends HttpServlet {
         session.setUser(user);
         session.setToken(token);
 
-        LocalDateTime time = LocalDateTime.now().plusSeconds(MAX_AGE_SESSION);
-        session.setExpiredTime(time);
+        LocalDateTime time = LocalDateTime.now().plusSeconds(securityService.getSessionMaxLifeTime());
+        session.setExpireTime(time);
         securityService.add(session);
 
         return token;

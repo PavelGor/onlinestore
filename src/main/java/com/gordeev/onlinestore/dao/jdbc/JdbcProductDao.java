@@ -18,6 +18,11 @@ public class JdbcProductDao implements ProductDao{
     private static final Logger LOG = LoggerFactory.getLogger(JdbcProductDao.class);
 
     private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
+    private static final String ADD_PRODUCT_SQL = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
+    private static final String GET_ALL_SQL = "SELECT * FROM product";
+    private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ";
+    private static final String EDIT_PRODUCT_SQL = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
+    private static final String DELETE_PRODUCT_SQL ="DELETE FROM product WHERE id= ?;";
 
     private DataSource dataSource = (DataSource) ServiceLocator.getService(DataSource.class);
 
@@ -26,12 +31,12 @@ public class JdbcProductDao implements ProductDao{
         List<Product> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM product")){
+            ResultSet resultSet = statement.executeQuery(GET_ALL_SQL)){
             while (resultSet.next()) {
                 result.add(PRODUCT_MAPPER.mapRow(resultSet));
             }
         } catch (SQLException e) {
-            LOG.trace("getAll(): ",e);
+            LOG.error("getAll(): ",e);
             throw new RuntimeException(e);
         }
         return result;
@@ -39,16 +44,16 @@ public class JdbcProductDao implements ProductDao{
 
     @Override
     public void add(Product product) {
-        String sql = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(ADD_PRODUCT_SQL)){
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
             statement.setString(4, product.getImgLink());
             statement.executeUpdate();
+            LOG.info("Product added to DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.trace("add(): ",e);
+            LOG.error("add(): ",e);
             throw new RuntimeException(e);
         }
     }
@@ -56,7 +61,7 @@ public class JdbcProductDao implements ProductDao{
     @Override
     public Product getById(int id) {
         Product product = new Product();
-        String sql = "SELECT * FROM product WHERE id = " + id;
+        String sql = GET_BY_ID_SQL + id;
         try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)){
@@ -64,7 +69,7 @@ public class JdbcProductDao implements ProductDao{
                 product = PRODUCT_MAPPER.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            LOG.trace("getById(): ",e);
+            LOG.error("getById(): ",e);
             throw new RuntimeException(e);
         }
         return product;
@@ -72,31 +77,30 @@ public class JdbcProductDao implements ProductDao{
 
     @Override
     public void edit(Product product) {
-        String sql = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(EDIT_PRODUCT_SQL)){
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
             statement.setString(4, product.getImgLink());
             statement.setInt(5, product.getId());
             statement.executeUpdate();
+            LOG.info("Product edited in DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.trace("edit(): ",e);
+            LOG.error("edit(): ",e);
             throw new RuntimeException(e);
         }
     }
 
-    //по хорошему удалять продукты из БД нельзя - история, необходимо ставить статус неактивен. Но похоже всё зависит от ТЗ
     @Override
     public void delete(Product product) {
-        String sql = "DELETE FROM product WHERE id= ?;";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(DELETE_PRODUCT_SQL)){
             statement.setInt(1, product.getId());
             statement.executeUpdate();
+            LOG.info("Product deleted from DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.trace("delete(): ",e);
+            LOG.error("delete(): ",e);
             throw new RuntimeException(e);
         }
     }

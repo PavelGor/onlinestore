@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class LogoutServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
@@ -25,11 +26,11 @@ public class LogoutServlet extends HttpServlet {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                     String token = cookie.getValue();
-                    Session session = securityService.getSession(token);
-
-                    LOG.info("User: " + session.getUser().getUserName() + " logout");
-                    securityService.removeSession(token);
-
+                    Optional<Session> optionalSession = securityService.getSession(token);
+                    if (optionalSession.isPresent()){
+                        LOG.info("User: " + optionalSession.get().getUser().getUserName() + " logout");
+                        securityService.removeSession(token);
+                    }
                     break;
                 }
             }

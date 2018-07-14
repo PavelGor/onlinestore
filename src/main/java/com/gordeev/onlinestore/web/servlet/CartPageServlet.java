@@ -5,15 +5,13 @@ import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.locator.ServiceLocator;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
-import com.gordeev.onlinestore.web.servlet.utils.ServletUtils;
+import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,35 +19,31 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class CartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
     private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
-    private TemplateEngine templateEngine;
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        ThymeleafPageGenerator thymeleafPageGenerator = new ThymeleafPageGenerator();
-        templateEngine = thymeleafPageGenerator.getTemplateEngine(getServletContext());
-    }
+    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
-        Session session = securityService.getSession(ServletUtils.getToken(request));
-        List<Product> productList = session.getCart();
-
         Map<String, Object> pageVariables = new HashMap<>();
 
-        User user = securityService.getUser(ServletUtils.getToken(request));
-        if (user != null){
-            pageVariables.put("userName", user.getUserName());
-            pageVariables.put("userRole", user.getRole().toString()); //TODO: kill toString?
-            LOG.info("User: " + user.getUserName() + " enter to his cart");
+        Optional<Session> optionalSession = securityService.getSession(ServletUtils.getToken(request));
+        if (optionalSession.isPresent()){
+            List<Product> productList = optionalSession.get().getCart();
+            pageVariables.put("productList", productList);
         }
 
-        pageVariables.put("productList", productList);
+        Optional<User> optionalUser = securityService.getUser(ServletUtils.getToken(request));
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get();
+            pageVariables.put("userRole", user.getRole().getName());
+            pageVariables.put("userName", user.getUserName());
+            LOG.info("User: " + user.getUserName() + " enter to his cart");
+        }
 
         context.setVariables(pageVariables);
 
@@ -61,9 +55,9 @@ public class CartPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Product product = ServletUtils.getProductFromRequest(request);
 
-        Session session = securityService.getSession(ServletUtils.getToken(request));
+        Optional<Session> optionalSession = securityService.getSession(ServletUtils.getToken(request));
 
-        session.removeFromCard(product);
+        optionalSession.ifPresent(session -> session.removeFromCard(product));
 
         response.sendRedirect("/cart");
     }

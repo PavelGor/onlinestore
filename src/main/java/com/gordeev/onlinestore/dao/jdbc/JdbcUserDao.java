@@ -11,9 +11,8 @@ import javax.sql.DataSource;
 import java.sql.*;
 
 public class JdbcUserDao implements UserDao {
-
-    static final Logger LOG = LoggerFactory.getLogger(JdbcUserDao.class);
-
+    private static final String GET_USER_BY_NAME_SQL = "SELECT * FROM users WHERE name = ";
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcUserDao.class);
     private static final UserMapper USER_MAPPER = new UserMapper();
 
     private DataSource dataSource = (DataSource) ServiceLocator.getService(DataSource.class);
@@ -21,7 +20,7 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User getByName(String name) {
         User user = null;
-        String sql = "SELECT * FROM users WHERE name = " + "'" + name + "'";
+        String sql =  GET_USER_BY_NAME_SQL + "'" + name + "'";
         try (Connection connection = dataSource.getConnection();
                 Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)){
@@ -29,7 +28,7 @@ public class JdbcUserDao implements UserDao {
                 user = USER_MAPPER.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            LOG.trace("getByName(): ",e);
+            LOG.error("getByName(): ",e);
             throw new RuntimeException(e);
         }
         return user;

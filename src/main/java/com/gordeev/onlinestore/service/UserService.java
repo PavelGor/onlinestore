@@ -6,9 +6,6 @@ import com.gordeev.onlinestore.locator.ServiceLocator;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class UserService {
     private UserDao userDao = (UserDao) ServiceLocator.getService(UserDao.class);
@@ -16,23 +13,23 @@ public class UserService {
     public UserService() {
     }
 
-    public User getByName (String name) {return userDao.getByName(name);}
+    private User getByName(String name) {return userDao.getByName(name);}
 
-    public User autenticate(String name, String password) throws IllegalAccessException {
+    public User autenticate(String name, String password) throws SecurityException {
         User user = getByName(name);
 
         if (user != null) {
-            String encryptedPassword = encrypt(password + user.getSole()); //TODO: use UUID.randomUUID() when you will generate
+            String encryptedPassword = encrypt(password + user.getSole());
 
             if (user.getPassword().equals(encryptedPassword)){
                 return user;
             }
         }
-        throw new IllegalAccessException("No such user found: " + name);
+        throw new SecurityException("No such user found: " + name);
     }
 
     public String encrypt(String text) {
-        StringBuilder code = new StringBuilder();
+        StringBuilder encryptedPassword = new StringBuilder();
         MessageDigest messageDigest = null;
         try {
             messageDigest = MessageDigest.getInstance("MD5");
@@ -40,11 +37,14 @@ public class UserService {
             e.printStackTrace();
         }
         byte bytes[] = text.getBytes();
-        byte digest[] = messageDigest.digest(bytes);
+        byte digest[] = new byte[0];
+        if (messageDigest != null) {
+            digest = messageDigest.digest(bytes);
+        }
         for (byte aDigest : digest) {
-            code.append(Integer.toHexString(0x0100 + (aDigest & 0x00FF)).substring(1));
+            encryptedPassword.append(Integer.toHexString(0x0100 + (aDigest & 0x00FF)).substring(1));
         }
 
-        return code.toString();
+        return encryptedPassword.toString();
     }
 }

@@ -1,4 +1,4 @@
-package com.gordeev.onlinestore.web.servlet.utils;
+package com.gordeev.onlinestore.web.servlet.util;
 
 import com.gordeev.onlinestore.entity.Product;
 
