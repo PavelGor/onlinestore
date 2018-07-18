@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserMapper {
-    public User mapRow(ResultSet resultSet) throws SQLException {
+    public static User mapRow(ResultSet resultSet) throws SQLException {
         String userRoleStr = resultSet.getString("role");
         UserRole role = UserRole.getByName(userRoleStr);
 

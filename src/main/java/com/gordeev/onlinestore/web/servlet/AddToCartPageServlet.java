@@ -1,7 +1,7 @@
 package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
-import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.ProductService;
@@ -17,8 +17,8 @@ import java.util.Optional;
 
 public class AddToCartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(AddToCartPageServlet.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
-    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
+    private SecurityService securityService = Context.getContext(SecurityService.class);
+    private ProductService productService = Context.getContext(ProductService.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

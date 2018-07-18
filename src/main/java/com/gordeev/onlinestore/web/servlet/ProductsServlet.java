@@ -2,7 +2,7 @@ package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ProductsServlet extends HttpServlet {
-    private ProductService productService = (ProductService) ServiceLocator.getService(ProductService.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private ProductService productService = Context.getContext(ProductService.class);
+    private SecurityService securityService = Context.getContext(SecurityService.class);
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     @Override

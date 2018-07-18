@@ -2,13 +2,12 @@ package com.gordeev.onlinestore.service;
 
 import com.gordeev.onlinestore.dao.UserDao;
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.locator.ServiceLocator;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class UserService {
-    private UserDao userDao = (UserDao) ServiceLocator.getService(UserDao.class);
+    private UserDao userDao;
 
     public UserService() {
     }
@@ -46,5 +45,9 @@ public class UserService {
         }
 
         return encryptedPassword.toString();
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

@@ -1,7 +1,7 @@
 package com.gordeev.onlinestore.web.servlet.security;
 
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.UserService;
@@ -22,8 +22,8 @@ import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
-    private UserService userService = (UserService) ServiceLocator.getService(UserService.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private UserService userService = Context.getContext(UserService.class);
+    private SecurityService securityService = Context.getContext(SecurityService.class);
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     @Override

@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gordeev.onlinestore.locator.ServiceLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,14 +16,13 @@ import javax.sql.DataSource;
 public class JdbcProductDao implements ProductDao{
     private static final Logger LOG = LoggerFactory.getLogger(JdbcProductDao.class);
 
-    private static final ProductMapper PRODUCT_MAPPER = new ProductMapper();
     private static final String ADD_PRODUCT_SQL = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
     private static final String GET_ALL_SQL = "SELECT * FROM product";
     private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ";
     private static final String EDIT_PRODUCT_SQL = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
     private static final String DELETE_PRODUCT_SQL ="DELETE FROM product WHERE id= ?;";
 
-    private DataSource dataSource = (DataSource) ServiceLocator.getService(DataSource.class);
+    private DataSource dataSource;
 
     @Override
     public List<Product> getAll() {
@@ -33,7 +31,7 @@ public class JdbcProductDao implements ProductDao{
              Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(GET_ALL_SQL)){
             while (resultSet.next()) {
-                result.add(PRODUCT_MAPPER.mapRow(resultSet));
+                result.add(ProductMapper.mapRow(resultSet));//TODO: check
             }
         } catch (SQLException e) {
             LOG.error("getAll(): ",e);
@@ -66,7 +64,7 @@ public class JdbcProductDao implements ProductDao{
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)){
             if (resultSet.next()) {
-                product = PRODUCT_MAPPER.mapRow(resultSet);
+                product = ProductMapper.mapRow(resultSet);//TODO: check
             }
         } catch (SQLException e) {
             LOG.error("getById(): ",e);
@@ -103,5 +101,9 @@ public class JdbcProductDao implements ProductDao{
             LOG.error("delete(): ",e);
             throw new RuntimeException(e);
         }
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

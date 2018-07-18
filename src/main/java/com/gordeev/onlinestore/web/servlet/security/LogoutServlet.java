@@ -1,6 +1,6 @@
 package com.gordeev.onlinestore.web.servlet.security;
 
-import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class LogoutServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private SecurityService securityService = Context.getContext(SecurityService.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

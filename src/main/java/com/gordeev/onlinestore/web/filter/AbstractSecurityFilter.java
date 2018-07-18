@@ -2,7 +2,7 @@ package com.gordeev.onlinestore.web.filter;
 
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.entity.UserRole;
-import com.gordeev.onlinestore.locator.ServiceLocator;
+import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public abstract class AbstractSecurityFilter implements Filter{
     private static final Logger LOG = LoggerFactory.getLogger(AbstractSecurityFilter.class);
-    private SecurityService securityService = (SecurityService) ServiceLocator.getService(SecurityService.class);
+    private SecurityService securityService = Context.getContext(SecurityService.class); //спорный вопрос - или 3 строки в xml-файле???
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

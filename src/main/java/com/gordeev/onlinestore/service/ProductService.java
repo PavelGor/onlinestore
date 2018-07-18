@@ -2,12 +2,11 @@ package com.gordeev.onlinestore.service;
 
 import com.gordeev.onlinestore.dao.ProductDao;
 import com.gordeev.onlinestore.entity.Product;
-import com.gordeev.onlinestore.locator.ServiceLocator;
 
 import java.util.List;
 
 public class ProductService {
-    private ProductDao productDao =  ServiceLocator.getService(ProductDao.class);
+    private ProductDao productDao;
 
     public ProductService() {
     }
@@ -30,5 +29,9 @@ public class ProductService {
 
     public void delete(Product product) {
         productDao.delete(product);
+    }
+
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
     }
 }
