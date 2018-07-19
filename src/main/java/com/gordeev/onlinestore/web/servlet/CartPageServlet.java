@@ -2,7 +2,6 @@ package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
@@ -23,8 +22,12 @@ import java.util.Optional;
 
 public class CartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
-    private SecurityService securityService = Context.getContext(SecurityService.class);
+    private SecurityService securityService;
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
+    public CartPageServlet(SecurityService securityService) {
+        this.securityService = securityService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

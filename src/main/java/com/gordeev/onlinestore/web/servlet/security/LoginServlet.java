@@ -1,7 +1,6 @@
 package com.gordeev.onlinestore.web.servlet.security;
 
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
 import com.gordeev.onlinestore.service.UserService;
@@ -22,9 +21,14 @@ import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
-    private UserService userService = Context.getContext(UserService.class);
-    private SecurityService securityService = Context.getContext(SecurityService.class);
+    private UserService userService;
+    private SecurityService securityService;
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
+    public LoginServlet(UserService userService, SecurityService securityService) {
+        this.userService = userService;
+        this.securityService = securityService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

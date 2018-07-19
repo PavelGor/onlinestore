@@ -13,8 +13,6 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
     @Override
     public void postProcessBeanFactory(List<BeanDefinition> beanDefinitionList) {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");
-//        BasicDataSource dataSource = new BasicDataSource();
-//        LOG.info("{}:{}", "JDBC_DATABASE_URL", dbUrl);
 
         if (dbUrl != null) {
             dbUrl += "&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
@@ -24,12 +22,10 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
                 properties.load(Main.class.getClassLoader().getResourceAsStream("application.properties"));
             } catch (IOException e) {
                 e.printStackTrace();
-//                LOG.info("bad file or properties in it");
             }
             dbUrl = properties.getProperty("url");
         }
 
-//        dataSource.setUrl(dbUrl);
         for (BeanDefinition beanDefinition : beanDefinitionList) {
             if ("dataSource".equals(beanDefinition.getId())){
                 for (Map.Entry<String, String> dependency : beanDefinition.getDependencies().entrySet()) {
@@ -40,9 +36,5 @@ public class DataSourceBeanFactoryPostProcessor implements BeanFactoryPostProces
                 }
             }
         }
-
-//        Context.register(DataSource.class, dataSource);
-
-//        LOG.info("Main: got connection to database");
     }
 }

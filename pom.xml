@@ -48,12 +48,12 @@
     </build>
 
     <dependencies>
+        <!--Application Context-->
         <dependency>
             <groupId>com.gordeev</groupId>
             <artifactId>aplication-context-library</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>/home/pavel/Projects/AplicationContextLibrary/target/aplication-context-library-1.0-SNAPSHOT.jar</systemPath>
+            <!--<systemPath>/home/pavel/Projects/AplicationContextLibrary/target/aplication-context-library-1.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -102,5 +102,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <repositories>
+        <repository>
+            <id>in-project</id>
+            <name>In Project Repo</name>
+            <url>file:///home/pavel/Projects/AplicationContextLibrary/src/main/java</url>
+        </repository>
+    </repositories>
 </project>

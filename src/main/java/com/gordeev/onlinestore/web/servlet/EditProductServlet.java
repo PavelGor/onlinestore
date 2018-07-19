@@ -2,7 +2,6 @@ package com.gordeev.onlinestore.web.servlet;
 
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
-import com.gordeev.onlinestore.context.Context;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
@@ -19,9 +18,14 @@ import java.util.Map;
 import java.util.Optional;
 
 public class EditProductServlet extends HttpServlet {
-    private ProductService productService = Context.getContext(ProductService.class);
-    private SecurityService securityService = Context.getContext(SecurityService.class);
+    private ProductService productService;
+    private SecurityService securityService;
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
+    public EditProductServlet(ProductService productService, SecurityService securityService) {
+        this.productService = productService;
+        this.securityService = securityService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
