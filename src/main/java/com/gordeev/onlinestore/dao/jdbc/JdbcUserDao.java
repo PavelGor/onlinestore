@@ -11,22 +11,23 @@ import java.sql.*;
 
 public class JdbcUserDao implements UserDao {
     private static final Logger LOG = LoggerFactory.getLogger(JdbcUserDao.class);
-    private static final String GET_USER_BY_NAME_SQL = "SELECT * FROM users WHERE name = ";
+    private static final String GET_USER_BY_NAME_SQL = "SELECT * FROM users WHERE name = ?";
 
     private DataSource dataSource;
 
     @Override
     public User getByName(String name) {
         User user = null;
-        String sql =  GET_USER_BY_NAME_SQL + "'" + name + "'";
         try (Connection connection = dataSource.getConnection();
-                Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)){
+                PreparedStatement statement = connection.prepareStatement(GET_USER_BY_NAME_SQL)){
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                user = UserMapper.mapRow(resultSet);//TODO: check
+                UserMapper userMapper = new UserMapper();
+                user = userMapper.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            LOG.error("getByName(): ",e);
+            LOG.error("Cannot execute query: {}", GET_USER_BY_NAME_SQL, e);
             throw new RuntimeException(e);
         }
         return user;

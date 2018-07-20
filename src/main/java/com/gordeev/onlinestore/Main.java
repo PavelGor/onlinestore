@@ -1,7 +1,5 @@
 package com.gordeev.onlinestore;
 
-import com.gordeev.applicationcontextlibrary.ApplicationContext;
-import com.gordeev.applicationcontextlibrary.ClassPathApplicationContext;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.service.UserService;
@@ -12,11 +10,12 @@ import com.gordeev.onlinestore.web.servlet.*;
 import com.gordeev.onlinestore.web.servlet.assets.AssetsServlet;
 import com.gordeev.onlinestore.web.servlet.security.LoginServlet;
 import com.gordeev.onlinestore.web.servlet.security.LogoutServlet;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,15 +27,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        ApplicationContext applicationContext = new ClassPathApplicationContext("context.xml");
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("context.xml");
+
         UserService userService = applicationContext.getBean(UserService.class);
         SecurityService securityService = applicationContext.getBean(SecurityService.class);
         ProductService productService = applicationContext.getBean(ProductService.class);
-        LOG.info("Main: got Services");
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        context.setBaseResource(Resource.newClassPathResource("/"));
         context.addServlet(new ServletHolder(new ProductsServlet(productService, securityService)), "/");
         context.addServlet(new ServletHolder(new AddProductServlet(productService, securityService)), "/product/add");
         context.addServlet(new ServletHolder(new EditProductServlet(productService, securityService)), "/product/edit/*");
@@ -55,8 +53,6 @@ public class Main {
 
         String portStr = System.getenv("PORT");
         int port = portStr == null ? 8080 : Integer.valueOf(portStr);
-
-        LOG.info("{}:{}", "PORT", port);
 
         Server server = new Server(port);
         server.setHandler(context);

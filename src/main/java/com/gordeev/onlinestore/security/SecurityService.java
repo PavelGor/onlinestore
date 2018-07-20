@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class SecurityService {
-    private static final int SESSION_MAX_LIFE_TIME = 300;
+    private int SESSION_MAX_LIFE_TIME;
     private List<Session> sessionList = new ArrayList<>();
 
     public Optional<Session> getSession(String token) {
@@ -56,5 +56,9 @@ public class SecurityService {
 
     public int getSessionMaxLifeTime() {
         return SESSION_MAX_LIFE_TIME;
+    }
+
+    public void setSESSION_MAX_LIFE_TIME(int SESSION_MAX_LIFE_TIME) {
+        this.SESSION_MAX_LIFE_TIME = SESSION_MAX_LIFE_TIME;
     }
 }

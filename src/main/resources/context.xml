@@ -5,9 +5,8 @@
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value=""/>
+        <property name="url" value="${url}"/>
     </bean>
-    <!--jdbc:postgresql://localhost:5432/onlinestore?user=root&amp;password=root&amp;ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory-->
 
     <bean id="userDao" class="com.gordeev.onlinestore.dao.jdbc.JdbcUserDao">
         <property name="dataSource" ref="dataSource"/>
@@ -18,6 +17,7 @@
     </bean>
 
     <bean id="securityService" class="com.gordeev.onlinestore.security.SecurityService">
+        <property name="SESSION_MAX_LIFE_TIME" value="300"/>
     </bean>
 
     <bean id="productService" class="com.gordeev.onlinestore.service.ProductService">
@@ -28,6 +28,6 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <bean class="com.gordeev.onlinestore.context.postprocessor.DataSourceBeanFactoryPostProcessor"/>
+    <bean class="com.gordeev.onlinestore.context.postprocessor.PropertiesBeanFactoryPostProcessor"/>
 
 </beans>

@@ -18,11 +18,12 @@ public class JdbcProductDao implements ProductDao{
 
     private static final String ADD_PRODUCT_SQL = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
     private static final String GET_ALL_SQL = "SELECT * FROM product";
-    private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ";
+    private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ?";
     private static final String EDIT_PRODUCT_SQL = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
     private static final String DELETE_PRODUCT_SQL ="DELETE FROM product WHERE id= ?;";
 
     private DataSource dataSource;
+    private ProductMapper productMapper = new ProductMapper(); //TODO Context or not?
 
     @Override
     public List<Product> getAll() {
@@ -31,10 +32,10 @@ public class JdbcProductDao implements ProductDao{
              Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(GET_ALL_SQL)){
             while (resultSet.next()) {
-                result.add(ProductMapper.mapRow(resultSet));//TODO: check
+                result.add(productMapper.mapRow(resultSet));
             }
         } catch (SQLException e) {
-            LOG.error("getAll(): ",e);
+            LOG.error("Cannot execute query: {}", GET_ALL_SQL, e);
             throw new RuntimeException(e);
         }
         return result;
@@ -51,7 +52,7 @@ public class JdbcProductDao implements ProductDao{
             statement.executeUpdate();
             LOG.info("Product added to DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.error("add(): ",e);
+            LOG.error("Cannot execute query: {}", ADD_PRODUCT_SQL, e);
             throw new RuntimeException(e);
         }
     }
@@ -59,15 +60,16 @@ public class JdbcProductDao implements ProductDao{
     @Override
     public Product getById(int id) {
         Product product = new Product();
-        String sql = GET_BY_ID_SQL + id;
         try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)){
+             PreparedStatement statement = connection.prepareStatement(GET_BY_ID_SQL)
+             ){
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                product = ProductMapper.mapRow(resultSet);//TODO: check
+                product = productMapper.mapRow(resultSet);
             }
         } catch (SQLException e) {
-            LOG.error("getById(): ",e);
+            LOG.error("Cannot execute query: {}", GET_BY_ID_SQL, e);
             throw new RuntimeException(e);
         }
         return product;
@@ -85,7 +87,7 @@ public class JdbcProductDao implements ProductDao{
             statement.executeUpdate();
             LOG.info("Product edited in DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.error("edit(): ",e);
+            LOG.error("Cannot execute query: {}", EDIT_PRODUCT_SQL, e);
             throw new RuntimeException(e);
         }
     }
@@ -98,7 +100,7 @@ public class JdbcProductDao implements ProductDao{
             statement.executeUpdate();
             LOG.info("Product deleted from DB: " + product.toString());
         } catch (SQLException e) {
-            LOG.error("delete(): ",e);
+            LOG.error("Cannot execute query: {}", DELETE_PRODUCT_SQL, e);
             throw new RuntimeException(e);
         }
     }
