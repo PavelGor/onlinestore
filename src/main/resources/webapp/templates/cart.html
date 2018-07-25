@@ -72,7 +72,7 @@
                 <div class="product-name" th:text="${product.name}">
                     name
                 </div>
-                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${product.price}">
+                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + @{ грн} ">
                     Стоимость: price грн
                 </div>
                 <div class="delete-btn">
@@ -85,7 +85,7 @@
                     <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
                 </div>
 
-                <div class="col-6 cart-value text-center" th:text="${#aggregates.sum(productList.{price})}">
+                <div class="col-6 cart-value text-center" th:text="${#numbers.formatDecimal(#aggregates.sum(productList.{price}), 1, 'COMMA', 2, 'POINT')} + @{ грн}">
                     Итого: totalSum грн
                 </div>
             </div>

@@ -31,8 +31,13 @@ public class ProductsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
-        List<Product> productList = productService.getAll();
         Map<String, Object> pageVariables = new HashMap<>();
+
+        String stringPageId = request.getParameter("page");
+        int pageId = stringPageId != null? Integer.parseInt(stringPageId) : 1;
+        byte productsOnPage= 4;
+        int from = productsOnPage * (pageId-1) + 1;
+        List<Product> productList = productService.getAll(productsOnPage, from);
 
         Optional<User> optionalUser = securityService.getUser(ServletUtils.getToken(request));
         if (optionalUser.isPresent()){

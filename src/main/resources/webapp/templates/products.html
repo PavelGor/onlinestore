@@ -1,5 +1,5 @@
 <!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8"></meta>
@@ -68,16 +68,20 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${product.name}">name</h5>
                         <p class="card-text" th:text="${product.description}">description</p>
-                        <p class="card-text" th:text="${product.price}">price</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + @{грн} ">price</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.currencyPrice, 1, 'COMMA', 2, 'POINT')} + @{dollars}">currencyPrice</p>
                         <div th:if="${userRole=='USER'}">
                             <form method="post" th:action="@{product/cart/?id=} + ${product.id}">
-                                <button type="submit" class="btn btn-primary btn-block" name="id" th:id="${product.id}">Add to cart</button>
+                                <button type="submit" class="btn btn-primary btn-block" name="id" th:id="${product.id}">
+                                    Add to cart
+                                </button>
                             </form>
                         </div>
 
                         <div class="admin-btns justify-content-between" th:if="${userRole=='ADMIN'}">
                             <a th:href="@{|product/edit/?id=${product.id}|}" class="btn btn-warning admin-btn">Edit</a>
-                            <a th:href="@{|product/delete/?id=${product.id}|}" class="btn btn-danger float-right admin-btn">Delete</a>
+                            <a th:href="@{|product/delete/?id=${product.id}|}"
+                               class="btn btn-danger float-right admin-btn">Delete</a>
                         </div>
 
                     </div>
@@ -85,6 +89,35 @@
             </div>
         </div>
     </div>
+    <br>
+    <!--<div class="navigation">-->
+        <nav aria-label="page-navigation">
+            <ul class="pagination justify-content-center">
+                <!--<li class="page-item disabled">-->
+                <!--<a class="page-link" href="#" tabindex="-1">Previous</a>-->
+                <!--</li>-->
+                <li class="page-item"><a class="page-link" href="products?page=1">1</a></li>
+                <li class="page-item"><a class="page-link" href="products?page=2">2</a></li>
+                <li class="page-item"><a class="page-link" href="products?page=3">3</a></li>
+                <!--<li class="page-item">-->
+                <!--<a class="page-link" href="#">Next</a>-->
+                <!--</li>-->
+            </ul>
+        </nav>
+        <!--<div class="input-group">-->
+            <!--<div class="input-group-prepend">-->
+                <!--<label class="input-group-text" for="productsOnPage">Products on page: </label>-->
+            <!--</div>-->
+            <!--<select class="custom-select" id="productsOnPage">-->
+                <!--<option value="2">2</option>-->
+                <!--<option selected value="4">4</option>-->
+                <!--<option value="8">8</option>-->
+                <!--<option value="12">12</option>-->
+                <!--<option value="24">24</option>-->
+                <!--<option value="48">48</option>-->
+            <!--</select>-->
+        <!--</div>-->
+    <!--</div>-->
 </main>
 
 <footer class="footer">

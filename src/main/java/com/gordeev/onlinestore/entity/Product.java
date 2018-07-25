@@ -4,9 +4,9 @@ public class Product {
     private int id;
     private String name;
     private double price;
+    private double currencyPrice;
     private String description;
     private String imgLink;
-
 
     public int getId() {
         return id;
@@ -30,6 +30,14 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getCurrencyPrice() {
+        return currencyPrice;
+    }
+
+    public void setCurrencyPrice(double currencyPrice) {
+        this.currencyPrice = currencyPrice;
     }
 
     public String getDescription() {

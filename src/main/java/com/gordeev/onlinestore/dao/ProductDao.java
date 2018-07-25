@@ -5,7 +5,7 @@ import com.gordeev.onlinestore.entity.Product;
 import java.util.List;
 
 public interface ProductDao {
-    List<Product> getAll();
+    List<Product> getAll(int limit, int from);
     void add(Product product);
     Product getById(int id);
     void edit(Product product);

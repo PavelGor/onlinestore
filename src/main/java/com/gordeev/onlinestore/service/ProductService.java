@@ -7,12 +7,23 @@ import java.util.List;
 
 public class ProductService {
     private ProductDao productDao;
+    private ExchangeRateService exchangeRateService;
 
     public ProductService() {
     }
 
-    public List<Product> getAll(){
-        return productDao.getAll();
+    public List<Product> getAll(int limit, int from){
+        List<Product> products = productDao.getAll(limit, from);
+        double rate;
+        if (exchangeRateService.getExchangeRate().isPresent()){
+            rate = exchangeRateService.getExchangeRate().get();
+            for (Product product : products) {
+                double currencyPrice = product.getPrice() / rate;
+                product.setCurrencyPrice(currencyPrice);
+            }
+        }
+
+        return products;
     }
 
     public void add(Product product){
@@ -33,5 +44,9 @@ public class ProductService {
 
     public void setProductDao(ProductDao productDao) {
         this.productDao = productDao;
+    }
+
+    public void setExchangeRateService(ExchangeRateService exchangeRateService) {
+        this.exchangeRateService = exchangeRateService;
     }
 }

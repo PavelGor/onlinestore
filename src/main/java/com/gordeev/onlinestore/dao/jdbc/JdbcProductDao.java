@@ -17,20 +17,22 @@ public class JdbcProductDao implements ProductDao{
     private static final Logger LOG = LoggerFactory.getLogger(JdbcProductDao.class);
 
     private static final String ADD_PRODUCT_SQL = "INSERT INTO product (name, price, description, img_link) VALUES ( ?, ?, ?, ?)";
-    private static final String GET_ALL_SQL = "SELECT * FROM product";
+    private static final String GET_ALL_SQL = "SELECT * FROM product LIMIT ? OFFSET ?";
     private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ?";
     private static final String EDIT_PRODUCT_SQL = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
     private static final String DELETE_PRODUCT_SQL ="DELETE FROM product WHERE id= ?;";
 
     private DataSource dataSource;
-    private ProductMapper productMapper = new ProductMapper(); //TODO Context or not?
+    private ProductMapper productMapper = new ProductMapper();
 
     @Override
-    public List<Product> getAll() {
+    public List<Product> getAll(int limit, int from) {
         List<Product> result = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(GET_ALL_SQL)){
+             PreparedStatement statement = connection.prepareStatement(GET_ALL_SQL)){
+            statement.setInt(1, limit);
+            statement.setInt(2, from);
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 result.add(productMapper.mapRow(resultSet));
             }
