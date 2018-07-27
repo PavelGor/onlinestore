@@ -46,4 +46,12 @@ main {
     min-height:85vh;
 }
 
-
+.navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+.input-group {
+margin-left: auto;
+}

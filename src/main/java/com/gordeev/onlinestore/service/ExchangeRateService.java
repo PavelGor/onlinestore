@@ -18,6 +18,7 @@ public class ExchangeRateService {
     private Optional<Double> exchangeRate;
     private LocalDateTime expireTime;
     private int EXCHANGE_RATE_MAX_LIFE_TIME;
+    private String URL_FOR_EXCHANGE_RATE;
 
     public ExchangeRateService() {
         expireTime = LocalDateTime.now();
@@ -38,7 +39,7 @@ public class ExchangeRateService {
 
 
         try {
-            URL urlObject = new URL("https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11");
+            URL urlObject = new URL(URL_FOR_EXCHANGE_RATE);
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlObject.openConnection();
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
@@ -54,7 +55,7 @@ public class ExchangeRateService {
             }
 
         } catch (IOException e) {
-            LOG.error("Cannot get exchange rate from PrivatBank", e);
+            LOG.error("Cannot get exchange rate from Bank", e);
         }
 
         return Optional.empty();

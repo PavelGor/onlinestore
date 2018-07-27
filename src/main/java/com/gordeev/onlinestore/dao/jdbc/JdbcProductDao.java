@@ -21,6 +21,7 @@ public class JdbcProductDao implements ProductDao{
     private static final String GET_BY_ID_SQL = "SELECT * FROM product WHERE id = ?";
     private static final String EDIT_PRODUCT_SQL = "UPDATE product SET name = ?, price = ?, description = ?, img_link = ? WHERE id = ?";
     private static final String DELETE_PRODUCT_SQL ="DELETE FROM product WHERE id= ?;";
+    private static final String GET_PRODUCTS_QUANTITY = "SELECT COUNT(id) FROM product;";
 
     private DataSource dataSource;
     private ProductMapper productMapper = new ProductMapper();
@@ -105,6 +106,21 @@ public class JdbcProductDao implements ProductDao{
             LOG.error("Cannot execute query: {}", DELETE_PRODUCT_SQL, e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int getProductsQuatity() {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(GET_PRODUCTS_QUANTITY)){
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            LOG.error("Cannot execute query: {}", GET_PRODUCTS_QUANTITY, e);
+            throw new RuntimeException(e);
+        }
+        return 0;
     }
 
     public void setDataSource(DataSource dataSource) {

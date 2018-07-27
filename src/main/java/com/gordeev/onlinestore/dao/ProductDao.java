@@ -10,4 +10,5 @@ public interface ProductDao {
     Product getById(int id);
     void edit(Product product);
     void delete(Product product);
+    int getProductsQuatity();
 }

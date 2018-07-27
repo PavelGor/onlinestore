@@ -34,10 +34,22 @@ public class ProductsServlet extends HttpServlet {
         Map<String, Object> pageVariables = new HashMap<>();
 
         String stringPageId = request.getParameter("page");
-        int pageId = stringPageId != null? Integer.parseInt(stringPageId) : 1;
-        byte productsOnPage= 4;
+        int pageId = stringPageId != null? Integer.parseInt(stringPageId) : productService.getDefaultPageNumber();
+        String stringProductsOnPage = request.getParameter("productsOnPage");
+        int productsOnPage;
+        if (stringProductsOnPage != null){
+            productsOnPage = Integer.parseInt(stringProductsOnPage);
+            productService.setProductsOnPage(productsOnPage);
+        } else {
+            productsOnPage = productService.getProductsOnPage();
+        }
+        pageVariables.put("productsOnPage", productsOnPage);
+        pageVariables.put("pages", Math.round(40));//productService.getProductsQuantity()/productsOnPage));
+        pageVariables.put("page", pageId);
+
         int from = productsOnPage * (pageId-1) + 1;
         List<Product> productList = productService.getAll(productsOnPage, from);
+        pageVariables.put("productList", productList);
 
         Optional<User> optionalUser = securityService.getUser(ServletUtils.getToken(request));
         if (optionalUser.isPresent()){
@@ -45,8 +57,6 @@ public class ProductsServlet extends HttpServlet {
             pageVariables.put("userRole", user.getRole().getName());
             pageVariables.put("userName", user.getUserName());
         }
-
-        pageVariables.put("productList", productList);
 
         context.setVariables(pageVariables);
 

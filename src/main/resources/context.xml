@@ -23,10 +23,13 @@
     <bean id="productService" class="com.gordeev.onlinestore.service.ProductService">
         <property name="productDao" ref="productDao"/>
         <property name="exchangeRateService" ref="exchangeRateService"/>
+        <property name="DEFAULT_PAGE_NUMBER" value="7"/>
+        <property name="productsOnPage" value="4"/>
     </bean>
 
     <bean id="exchangeRateService" class="com.gordeev.onlinestore.service.ExchangeRateService">
         <property name="EXCHANGE_RATE_MAX_LIFE_TIME" value="24"/>
+        <property name="URL_FOR_EXCHANGE_RATE" value="https://api.privatbank.ua/p24api/pubinfo?exchange&amp;json&amp;coursid=11"/>
     </bean>
 
     <bean id="userService" class="com.gordeev.onlinestore.service.UserService">
