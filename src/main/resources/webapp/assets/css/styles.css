@@ -4,11 +4,10 @@
 .footer{
     background-color: #f8f9fa;
     margin-top:10px;
+    height: 50px;
+    text-align: center;
 }
-footer{
-    bottom: 0;
-    width: 100%;
-}
+
 .admin-btn{
     width:75px;
     margin:5px;

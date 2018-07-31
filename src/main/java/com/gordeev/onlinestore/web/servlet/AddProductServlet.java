@@ -18,9 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AddProductServlet extends HttpServlet {
+    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
     private ProductService productService;
     private SecurityService securityService;
-    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     public AddProductServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;

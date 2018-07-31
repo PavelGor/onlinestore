@@ -23,11 +23,14 @@
                      alt="">
                 Online Store
             </a>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+
                 <div>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
@@ -38,14 +41,15 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="col-6">
                     <form class="form-inline my-2 my-lg-0 search-form">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
                     </form>
                 </div>
-                <div class="row">
 
+                <div class="row">
                     <form method="post" action="/exit" th:if="${userRole!=null}">
                         <button type="submit" class="btn btn-link" th:text="@{Exit:} + ${userName}"></button>
                     </form>
@@ -54,6 +58,7 @@
                     </form>
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
                 </div>
+
             </div>
         </nav>
     </div>
@@ -61,18 +66,27 @@
 
 <main>
     <div class="container">
+
         <div class="row" th:object="${productList}">
+
             <div class="col-md-3" th:each="product :${productList}">
+
                 <div class="card">
+
                     <img class="card-img-top card-img" th:src="@{${product.imgLink}}" alt="Card image cap">
+
                     <div class="card-body">
+
                         <h5 class="card-title" th:text="${product.name}">name</h5>
+
                         <p class="card-text" th:text="${product.description}">description</p>
-                        <p class="card-text" th:text="${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + @{грн} ">price</p>
-                        <p class="card-text" th:text="${#numbers.formatDecimal(product.currencyPrice, 1, 'COMMA', 2, 'POINT')} + @{dollars}">currencyPrice</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.priceUah, 1, 'COMMA', 2, 'POINT')} + @{грн} ">priceUah</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.priceUsd, 1, 'COMMA', 2, 'POINT')} + @{dollars}">priceUsd</p>
+
                         <div th:if="${userRole=='USER'}">
-                            <form method="post" th:action="@{product/cart/?id=} + ${product.id}">
-                                <button type="submit" class="btn btn-primary btn-block" name="id" th:id="${product.id}">
+                            <form method="post" action="product/cart/">
+                                <input type="hidden" name="id" th:value="${product.id}">
+                                <button type="submit" class="btn btn-primary btn-block">
                                     Add to cart
                                 </button>
                             </form>
@@ -91,20 +105,28 @@
     </div>
     <br>
     <div class="navigation container">
+
         <nav aria-label="page-navigation">
-            <ul class="pagination justify-content-center" th:if="${page<3}">
-                <li class="page-item"  th:each="i : ${#numbers.sequence( 1, 5)}"><a class="page-link" th:href="@{products(page=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
+
+            <!--if page number <= 5-->
+            <ul class="pagination justify-content-center" th:if="${pageNumber<=5}">
+                <li class="page-item"  th:each="i : ${#numbers.sequence( 1, pageCount)}"><a class="page-link" th:href="@{products(pageNumber=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
             </ul>
-            <ul class="pagination justify-content-center" th:if="${pages>=6 and page>=3}">
-                <li class="page-item"  th:each="i : ${#numbers.sequence((page-2), (page+2))}"><a class="page-link" th:href="@{products(page=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
-                <li>...</li>
-                <li class="page-item"><a class="page-link" th:href="@{products(page=${pages},productsOnPage=${productsOnPage})}" th:text="${pages}">1</a></li>
+            <!--if page number > 5-->
+            <ul class="pagination justify-content-center" th:if="${pageNumber>5}">
+                <li class="page-item"><a class="page-link" th:href="@{products(pageNumber=1,productsOnPage=${productsOnPage})}">First</a></li>
+                <li class="page-item"  th:each="i : ${#numbers.sequence((pageNumber-2), (pageNumber+2))}"><a class="page-link" th:href="@{products(pageNumber=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{products(pageNumber=${pageCount},productsOnPage=${productsOnPage})}">Last</a></li>
             </ul>
+
         </nav>
-        <form class="input-group col-3" method="get" action="products?productsOnPage=">
+
+        <form class="input-group col-3" method="get" action="products">
+
             <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary" type="submit">Set products on page:</button>
             </div>
+
             <select class="custom-select" id="productsOnPage" name="productsOnPage">
                 <option value="2">2</option>
                 <option selected value="4">4</option>
@@ -113,23 +135,33 @@
                 <option value="24">24</option>
                 <option value="48">48</option>
             </select>
+
         </form>
+
     </div>
 </main>
 
+
 <footer class="footer">
+
     <div class="container footer">
+
         <div class="row  justify-content-between">
+
             <div class="link-to-top d-flex align-items-center">
                 <a href="#top">Go to top</a>
             </div>
+
             <div class="contacts d-flex align-items-center">
                 +38 050 555 55 55, +38 067 777 77 77
             </div>
+
             <div class="developed-by d-flex align-items-center">
                 Developed by @some company
             </div>
+
         </div>
+
     </div>
 </footer>
 

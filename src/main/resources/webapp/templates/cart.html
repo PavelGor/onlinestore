@@ -17,17 +17,21 @@
 <header>
     <div class="container-header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+
             <a class="navbar-brand" href="/">
                 <img src="https://assets3.insales.ru/assets/1/1431/214423/v_1500006566/build/cart1.png" width="30"
                      height="30" class="d-inline-block align-top"
                      alt="">
                 Online Store
             </a>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+
                 <div>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
@@ -38,12 +42,14 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="col-6">
                     <form class="form-inline my-2 my-lg-0 search-form">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
                     </form>
                 </div>
+
                 <div class="row">
 
                     <form method="post" action="/exit" th:if="${userRole!=null}">
@@ -52,8 +58,11 @@
                     <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
+
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
+
                 </div>
+
             </div>
         </nav>
     </div>
@@ -61,23 +70,30 @@
 
 <main>
     <div class="container">
+
         <div>
             <h3 class="col-sm-6">Заказать товар:</h3>
         </div>
+
         <form method="post" th:object="${productList}">
+
             <div class="row product justify-content-between" th:each="product :${productList}">
                 <div >
                     <img class="product-img" th:src="@{${product.imgLink}}" alt="Cart image cap">
                 </div>
+
                 <div class="product-name" th:text="${product.name}">
                     name
                 </div>
-                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${#numbers.formatDecimal(product.price, 1, 'COMMA', 2, 'POINT')} + @{ грн} ">
-                    Стоимость: price грн
+
+                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${#numbers.formatDecimal(product.priceUah, 1, 'COMMA', 2, 'POINT')} + @{ грн} ">
+                    Стоимость: priceUah грн
                 </div>
+
                 <div class="delete-btn">
                     <a th:href="@{|product/cart/delete/?id=${product.id}|}" class="btn btn-outline-danger" >Delete</a>
                 </div>
+
             </div>
 
             <div class="row">
@@ -85,9 +101,10 @@
                     <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
                 </div>
 
-                <div class="col-6 cart-value text-center" th:text="${#numbers.formatDecimal(#aggregates.sum(productList.{price}), 1, 'COMMA', 2, 'POINT')} + @{ грн}">
+                <div class="col-6 cart-value text-center" th:text="${#numbers.formatDecimal(#aggregates.sum(productList.{priceUah}), 1, 'COMMA', 2, 'POINT')} + @{ грн}">
                     Итого: totalSum грн
                 </div>
+
             </div>
         </form>
     </div>
@@ -95,16 +112,21 @@
 
 <footer class="footer">
     <div class="container footer">
+
         <div class="row  justify-content-between">
+
             <div class="link-to-top d-flex align-items-center">
                 <a href="#top">Go to top</a>
             </div>
+
             <div class="contacts d-flex align-items-center">
                 +38 050 555 55 55, +38 067 777 77 77
             </div>
+
             <div class="developed-by d-flex align-items-center">
                 Developed by @some company
             </div>
+
         </div>
     </div>
 </footer>

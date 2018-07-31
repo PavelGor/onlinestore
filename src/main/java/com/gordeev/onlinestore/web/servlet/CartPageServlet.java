@@ -22,8 +22,9 @@ import java.util.Optional;
 
 public class CartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
-    private SecurityService securityService;
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
+    private SecurityService securityService;
 
     public CartPageServlet(SecurityService securityService) {
         this.securityService = securityService;

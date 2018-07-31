@@ -1,9 +1,11 @@
 package com.gordeev.onlinestore.service;
 
+import com.gordeev.onlinestore.service.entity.ExchangeRate;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,17 +19,21 @@ public class ExchangeRateService {
     private final static ObjectMapper mapper = new ObjectMapper();
     private Optional<Double> exchangeRate;
     private LocalDateTime expireTime;
-    private int EXCHANGE_RATE_MAX_LIFE_TIME;
-    private String URL_FOR_EXCHANGE_RATE;
+    private int exchangeRateMaxLifeTime;
+    private String urlForExchangeRate;
 
     public ExchangeRateService() {
         expireTime = LocalDateTime.now();
+
+    }
+
+    private void init(){
         exchangeRate = getExchangeRateFromBank();
     }
 
     public Optional<Double> getExchangeRate() {
         LocalDateTime time = LocalDateTime.now();
-        if (time.isAfter(expireTime.plusHours(EXCHANGE_RATE_MAX_LIFE_TIME))
+        if (time.isAfter(expireTime.plusHours(exchangeRateMaxLifeTime))
                 || !exchangeRate.isPresent()) {
             exchangeRate = getExchangeRateFromBank();
             expireTime = time;
@@ -39,17 +45,16 @@ public class ExchangeRateService {
 
 
         try {
-            URL urlObject = new URL(URL_FOR_EXCHANGE_RATE);
+            URL urlObject = new URL(urlForExchangeRate);
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlObject.openConnection();
             httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
             BufferedReader inputStream = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
 
             ExchangeRate[] exchangeRates = mapper.readValue(inputStream, ExchangeRate[].class);
 
             for (ExchangeRate rate : exchangeRates) {
-                if ("USD".equals(rate.getCcy()) && "UAH".equals(rate.getBase_ccy())) {
+                if ("USD".equals(rate.getCcy()) && "UAH".equals(rate.getBaseCurrency())) {
                     return Optional.of(Double.parseDouble(rate.getSale()));
                 }
             }
@@ -61,7 +66,11 @@ public class ExchangeRateService {
         return Optional.empty();
     }
 
-    public void setEXCHANGE_RATE_MAX_LIFE_TIME(int EXCHANGE_RATE_MAX_LIFE_TIME) {
-        this.EXCHANGE_RATE_MAX_LIFE_TIME = EXCHANGE_RATE_MAX_LIFE_TIME;
+    public void setExchangeRateMaxLifeTime(int exchangeRateMaxLifeTime) {
+        this.exchangeRateMaxLifeTime = exchangeRateMaxLifeTime;
+    }
+
+    public void setUrlForExchangeRate(String urlForExchangeRate) {
+        this.urlForExchangeRate = urlForExchangeRate;
     }
 }

@@ -21,9 +21,10 @@ import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
+    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+
     private UserService userService;
     private SecurityService securityService;
-    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
     public LoginServlet(UserService userService, SecurityService securityService) {
         this.userService = userService;
@@ -59,7 +60,7 @@ public class LoginServlet extends HttpServlet {
             cookie.setMaxAge(securityService.getSessionMaxLifeTime());
             response.addCookie(cookie);
             response.sendRedirect("/");
-            LOG.info("User: " + user.getUserName() + " logged in");
+            LOG.info("User: {} logged in", user.getUserName());
         } catch (SecurityException e) {
             response.sendRedirect("/login");
         }

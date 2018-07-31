@@ -5,7 +5,7 @@ use `onlinestore`;
 CREATE TABLE `product` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `price` FLOAT NOT NULL,
+  `priceUah` FLOAT NOT NULL,
   `description` VARCHAR(500) NOT NULL,
   `img_link` VARCHAR(145) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci',
   PRIMARY KEY (`id`));

@@ -5,13 +5,13 @@ import java.util.Objects;
 public class User {
     private String userName;
     private String password;
-    private String sole;
+    private String salt;
     private UserRole role;
 
-    public User(String userName, String password, String sole, UserRole role) {
+    public User(String userName, String password, String salt, UserRole role) {
         this.userName = userName;
         this.password = password;
-        this.sole = sole;
+        this.salt = salt;
         this.role = role;
     }
 
@@ -31,8 +31,8 @@ public class User {
         return role;
     }
 
-    public String getSole() {
-        return sole;
+    public String getSalt() {
+        return salt;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class ServletUtils {
         }
 
         product.setName(name);
-        product.setPrice(price);
+        product.setPriceUah(price);
         product.setDescription(description);
         product.setImgLink(imgLink);
 

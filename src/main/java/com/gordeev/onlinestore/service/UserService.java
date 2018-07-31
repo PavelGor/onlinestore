@@ -18,7 +18,7 @@ public class UserService {
         User user = getByName(name);
 
         if (user != null) {
-            String encryptedPassword = encrypt(password + user.getSole());
+            String encryptedPassword = encrypt(password + user.getSalt());
 
             if (user.getPassword().equals(encryptedPassword)){
                 return user;

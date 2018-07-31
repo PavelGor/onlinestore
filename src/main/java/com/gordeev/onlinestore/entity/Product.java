@@ -3,8 +3,8 @@ package com.gordeev.onlinestore.entity;
 public class Product {
     private int id;
     private String name;
-    private double price;
-    private double currencyPrice;
+    private double priceUah;
+    private double priceUsd;
     private String description;
     private String imgLink;
 
@@ -24,20 +24,20 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
+    public double getPriceUah() {
+        return priceUah;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPriceUah(double priceUah) {
+        this.priceUah = priceUah;
     }
 
-    public double getCurrencyPrice() {
-        return currencyPrice;
+    public double getPriceUsd() {
+        return priceUsd;
     }
 
-    public void setCurrencyPrice(double currencyPrice) {
-        this.currencyPrice = currencyPrice;
+    public void setPriceUsd(double priceUsd) {
+        this.priceUsd = priceUsd;
     }
 
     public String getDescription() {
@@ -61,7 +61,7 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", price=" + price +
+                ", priceUah=" + priceUah +
                 ", description='" + description + '\'' +
                 '}';
     }

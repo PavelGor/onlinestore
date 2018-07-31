@@ -19,6 +19,6 @@ public enum UserRole {
                 return userRole;
             }
         }
-        throw new IllegalArgumentException("No user name with name " + name + " found");
+        throw new IllegalArgumentException("No user with name " + name + " found");
     }
 }

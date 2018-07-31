@@ -1,8 +1,11 @@
-package com.gordeev.onlinestore.service;
+package com.gordeev.onlinestore.service.entity;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 public class ExchangeRate {
     private String ccy;
-    private String base_ccy;
+    @JsonProperty("base_ccy")
+    private String baseCurrency;
     private String buy;
     private String sale;
 
@@ -14,12 +17,12 @@ public class ExchangeRate {
         this.ccy = ccy;
     }
 
-    public String getBase_ccy() {
-        return base_ccy;
+    public String getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void setBase_ccy(String base_ccy) {
-        this.base_ccy = base_ccy;
+    public void setBaseCurrency(String baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
     public String getBuy() {
@@ -42,7 +45,7 @@ public class ExchangeRate {
     public String toString() {
         final StringBuilder sb = new StringBuilder("ExchangeRate{");
         sb.append("ccy='").append(ccy).append('\'');
-        sb.append(", base_ccy='").append(base_ccy).append('\'');
+        sb.append(", baseCurrency='").append(baseCurrency).append('\'');
         sb.append(", buy='").append(buy).append('\'');
         sb.append(", sale='").append(sale).append('\'');
         sb.append('}');

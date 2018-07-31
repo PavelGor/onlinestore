@@ -6,11 +6,13 @@ import com.gordeev.onlinestore.entity.Product;
 import java.util.List;
 
 public class ProductService {
-    private ProductDao productDao;
-    private ExchangeRateService exchangeRateService;
     private int productsOnPage;
     private int productsQuantity;
-    private int DEFAULT_PAGE_NUMBER;
+    private int defaultPageNumber;
+
+    private ProductDao productDao;
+
+    private ExchangeRateService exchangeRateService;
 
     public ProductService() {
     }
@@ -21,8 +23,8 @@ public class ProductService {
         if (exchangeRateService.getExchangeRate().isPresent()){
             double rate = exchangeRateService.getExchangeRate().get();
             for (Product product : products) {
-                double currencyPrice = product.getPrice() / rate;
-                product.setCurrencyPrice(currencyPrice);
+                double currencyPrice = product.getPriceUah() / rate;
+                product.setPriceUsd(currencyPrice);
             }
         }
 
@@ -31,7 +33,6 @@ public class ProductService {
 
     public void add(Product product){
         productDao.add(product);
-        productsQuantity++; //TODO: check for adding from DB - status from productDao.delete(product) == -1  ???
     }
 
     public void edit(Product product){
@@ -44,7 +45,6 @@ public class ProductService {
 
     public void delete(Product product) {
         productDao.delete(product);
-        productsQuantity--; //TODO: check for deleting from DB - status from productDao.delete(product) == -1  ???
     }
 
     public void setProductDao(ProductDao productDao) {
@@ -64,16 +64,16 @@ public class ProductService {
     }
 
     public int getDefaultPageNumber() {
-        return DEFAULT_PAGE_NUMBER;
+        return defaultPageNumber;
     }
 
-    public void setDEFAULT_PAGE_NUMBER(int DEFAULT_PAGE_NUMBER) {
-        this.DEFAULT_PAGE_NUMBER = DEFAULT_PAGE_NUMBER;
+    public void setDefaultPageNumber(int defaultPageNumber) {
+        this.defaultPageNumber = defaultPageNumber;
     }
 
     public int getProductsQuantity() {
         if (productsQuantity == 0){
-            productsQuantity = productDao.getProductsQuatity();
+            productsQuantity = productDao.getProductsQuantity();
         }
         return productsQuantity;
     }

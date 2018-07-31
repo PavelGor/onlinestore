@@ -33,19 +33,15 @@ public class ProductsServlet extends HttpServlet {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
         Map<String, Object> pageVariables = new HashMap<>();
 
-        String stringPageId = request.getParameter("page");
+        String stringPageId = request.getParameter("pageNumber");
         int pageId = stringPageId != null? Integer.parseInt(stringPageId) : productService.getDefaultPageNumber();
+        pageVariables.put("pageNumber", pageId);
+
         String stringProductsOnPage = request.getParameter("productsOnPage");
-        int productsOnPage;
-        if (stringProductsOnPage != null){
-            productsOnPage = Integer.parseInt(stringProductsOnPage);
-            productService.setProductsOnPage(productsOnPage);
-        } else {
-            productsOnPage = productService.getProductsOnPage();
-        }
+        int productsOnPage = stringProductsOnPage != null? Integer.parseInt(stringProductsOnPage) : productService.getProductsOnPage();
         pageVariables.put("productsOnPage", productsOnPage);
-        pageVariables.put("pages", Math.round(40));//productService.getProductsQuantity()/productsOnPage));
-        pageVariables.put("page", pageId);
+
+        pageVariables.put("pageCount", Math.round(productService.getProductsQuantity()/productsOnPage));
 
         int from = productsOnPage * (pageId-1) + 1;
         List<Product> productList = productService.getAll(productsOnPage, from);

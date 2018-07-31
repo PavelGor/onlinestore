@@ -10,7 +10,7 @@ import java.io.InputStream;
 public class AssetsServlet extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        File file = new File("webapp",req.getRequestURI());
+        File file = new File("webapp",req.getRequestURI()); //TODO req.getRequestURI().substring(1)
         try (InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(file.getPath())){
             byte[] buffer = new byte[8192];
             int count;

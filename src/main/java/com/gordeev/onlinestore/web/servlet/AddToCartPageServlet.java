@@ -16,6 +16,7 @@ import java.util.Optional;
 
 public class AddToCartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(AddToCartPageServlet.class);
+
     private ProductService productService;
     private SecurityService securityService;
 
@@ -33,7 +34,7 @@ public class AddToCartPageServlet extends HttpServlet {
             Optional<Session> optionalSession = securityService.getSession(ServletUtils.getToken(request));
             if (optionalSession.isPresent()){
                 optionalSession.get().addToCart(product);
-                LOG.info("User: " + optionalSession.get().getUser().getUserName() + " add product: " + product + " to his cart");
+                LOG.info("User: {} add product: {} to his cart", optionalSession.get().getUser().getUserName(), product);
             }
         }
 

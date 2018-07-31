@@ -5,7 +5,7 @@ CREATE DATABASE onlinestore
 CREATE TABLE product(
   id SERIAL PRIMARY KEY,
   name VARCHAR(45) NOT NULL,
-  price REAL NOT NULL,
+  priceUah REAL NOT NULL,
   description VARCHAR(500) NOT NULL,
   img_link VARCHAR(145) NOT NULL
   );

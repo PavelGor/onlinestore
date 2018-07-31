@@ -1,41 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context
+                            http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="url" value="${url}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="driverClassName" value="${db.driverClassName}"/>
     </bean>
 
     <bean id="userDao" class="com.gordeev.onlinestore.dao.jdbc.JdbcUserDao">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="productMapper" class="com.gordeev.onlinestore.dao.jdbc.mapper.ProductMapper">
+    </bean>
+
     <bean id="productDao" class="com.gordeev.onlinestore.dao.jdbc.JdbcProductDao">
         <property name="dataSource" ref="dataSource"/>
+        <property name="productMapper" ref="productMapper"/>
     </bean>
 
     <bean id="securityService" class="com.gordeev.onlinestore.security.SecurityService">
-        <property name="SESSION_MAX_LIFE_TIME" value="300"/>
+        <property name="sessionMaxLifeTime" value="${sessionMaxLifeTime}"/>
     </bean>
 
     <bean id="productService" class="com.gordeev.onlinestore.service.ProductService">
         <property name="productDao" ref="productDao"/>
         <property name="exchangeRateService" ref="exchangeRateService"/>
-        <property name="DEFAULT_PAGE_NUMBER" value="7"/>
-        <property name="productsOnPage" value="4"/>
+        <property name="defaultPageNumber" value="${defaultPageNumber}"/>
+        <property name="productsOnPage" value="${productsOnPage}"/>
     </bean>
 
-    <bean id="exchangeRateService" class="com.gordeev.onlinestore.service.ExchangeRateService">
-        <property name="EXCHANGE_RATE_MAX_LIFE_TIME" value="24"/>
-        <property name="URL_FOR_EXCHANGE_RATE" value="https://api.privatbank.ua/p24api/pubinfo?exchange&amp;json&amp;coursid=11"/>
+    <bean id="exchangeRateService" class="com.gordeev.onlinestore.service.ExchangeRateService" init-method="init">
+        <property name="exchangeRateMaxLifeTime" value="${exchangeRateMaxLifeTime}"/>
+        <property name="urlForExchangeRate" value="${urlForExchangeRate}"/>
     </bean>
 
     <bean id="userService" class="com.gordeev.onlinestore.service.UserService">
         <property name="userDao" ref="userDao"/>
     </bean>
 
-    <bean class="com.gordeev.onlinestore.context.postprocessor.PropertiesBeanFactoryPostProcessor"/>
+    <context:property-placeholder location="classpath:application.properties" />
 
 </beans>

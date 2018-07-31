@@ -20,7 +20,7 @@ public class ProductMapperTest {
         expectedProduct = new Product();
         expectedProduct.setId(1);
         expectedProduct.setName("test_name");
-        expectedProduct.setPrice(10);
+        expectedProduct.setPriceUah(10);
         expectedProduct.setDescription("test_description");
         expectedProduct.setImgLink("test_imgLink");
 
@@ -41,7 +41,7 @@ public class ProductMapperTest {
         assertEquals(expectedProduct.getId(),actualProduct.getId());
         assertEquals(expectedProduct.getName(),actualProduct.getName());
         assertEquals(expectedProduct.getDescription(),actualProduct.getDescription());
-        assertEquals(expectedProduct.getPrice(),actualProduct.getPrice(), 0.1);
+        assertEquals(expectedProduct.getPriceUah(),actualProduct.getPriceUah(), 0.1);
         assertEquals(expectedProduct.getImgLink(),actualProduct.getImgLink());
     }
 }

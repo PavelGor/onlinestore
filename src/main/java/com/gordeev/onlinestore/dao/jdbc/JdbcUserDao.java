@@ -21,19 +21,20 @@ public class JdbcUserDao implements UserDao {
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(GET_USER_BY_NAME_SQL)){
             statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                UserMapper userMapper = new UserMapper();
-                user = userMapper.mapRow(resultSet);
+            try(ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    UserMapper userMapper = new UserMapper();
+                    user = userMapper.mapRow(resultSet);
+                }
             }
         } catch (SQLException e) {
-            LOG.error("Cannot execute query: {}", GET_USER_BY_NAME_SQL, e);
+            LOG.error(String.format("Cannot execute query: %s", GET_USER_BY_NAME_SQL), e);
             throw new RuntimeException(e);
         }
         return user;
     }
 
-    public void setDataSource(DataSource dataSource) {
+    public void setDataSource(DataSource dataSource) { //TODO check without it, when take Spring factorypostprocessor
         this.dataSource = dataSource;
     }
 }

@@ -16,18 +16,23 @@
 
 <header>
     <div class="container-header">
+
         <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+
             <a class="navbar-brand" href="/">
                 <img src="https://assets3.insales.ru/assets/1/1431/214423/v_1500006566/build/cart1.png" width="30"
                      height="30" class="d-inline-block align-top"
                      alt="">
                 Online Store
             </a>
+
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+
                 <div>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
@@ -38,12 +43,14 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="col-6">
                     <form class="form-inline my-2 my-lg-0 search-form">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0 float-right" type="submit">Search</button>
                     </form>
                 </div>
+
                 <div class="row">
 
                     <form method="post" action="/exit" th:if="${userRole!=null}">
@@ -52,8 +59,11 @@
                     <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
+
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
+
                 </div>
+
             </div>
         </nav>
     </div>
@@ -64,50 +74,64 @@
         <div>
             <h3 class="col-sm-6">Добавить новый товар:</h3>
         </div>
+
         <form method="post">
+
             <div class="form-group">
                 <label for="name" class="col-sm-2 col-form-label">Наименование</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" required>
                 </div>
             </div>
+
             <div class="form-group">
-                <label for="price" class="col-sm-2 col-form-label">Стоимость</label>
+                <label for="priceUah" class="col-sm-2 col-form-label">Стоимость</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="price" id="price" required>
+                    <input type="text" class="form-control" name="priceUah" id="priceUah" required>
                 </div>
             </div>
+
             <div class="form-group">
                 <label for="description" class="col-sm-2 col-form-label">Описание:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="description" id="description" required>
                 </div>
             </div>
+
             <div class="form-group">
                 <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="imgLink" id="imgLink" required>
                 </div>
             </div>
+
             <div class="form-group row justify-content-center">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
             </div>
+
         </form>
+
     </div>
 </main>
 
 <footer class="footer">
+
     <div class="container footer">
+
         <div class="row  justify-content-between">
+
             <div class="link-to-top d-flex align-items-center">
                 <a href="#top">Go to top</a>
             </div>
+
             <div class="contacts d-flex align-items-center">
                 +38 050 555 55 55, +38 067 777 77 77
             </div>
+
             <div class="developed-by d-flex align-items-center">
                 Developed by @some company
             </div>
+
         </div>
     </div>
 </footer>
