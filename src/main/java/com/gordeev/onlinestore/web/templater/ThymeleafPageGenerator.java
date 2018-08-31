@@ -11,7 +11,7 @@ public class ThymeleafPageGenerator {
     private ThymeleafPageGenerator() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("/webapp/templates/");
+        templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setCacheTTLMs(3600000L);
         templateEngine = new TemplateEngine();

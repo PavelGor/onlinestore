@@ -1,23 +1,22 @@
 <!doctype html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
-<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta charset="utf-8"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
-    <link rel="stylesheet" href="/assets/css/styles.css">
+    <title>Online Store</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
 
 <header>
     <div class="container-header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light container">
-
             <a class="navbar-brand" href="/">
                 <img src="https://assets3.insales.ru/assets/1/1431/214423/v_1500006566/build/cart1.png" width="30"
                      height="30" class="d-inline-block align-top"
@@ -31,6 +30,7 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+
                 <div>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
@@ -50,16 +50,13 @@
                 </div>
 
                 <div class="row">
-
                     <form method="post" action="/exit" th:if="${userRole!=null}">
                         <button type="submit" class="btn btn-link" th:text="@{Exit:} + ${userName}"></button>
                     </form>
                     <form method="get" action="/login" th:if="${userRole==null}">
                         <button type="submit" class="btn btn-link">Enter</button>
                     </form>
-
                     <a class="btn btn-success float-right" href="/cart" role="button">Cart</a>
-
                 </div>
 
             </div>
@@ -69,54 +66,84 @@
 
 <main>
     <div class="container">
-        <div>
-            <h3 class="col-sm-6">Редактировать товар:</h3>
+
+        <div class="row" th:object="${productList}">
+
+            <div class="col-md-3" th:each="product :${productList}">
+
+                <div class="card">
+
+                    <img class="card-img-top card-img" th:src="@{${product.imgLink}}" alt="Card image cap">
+
+                    <div class="card-body">
+
+                        <h5 class="card-title" th:text="${product.name}">name</h5>
+
+                        <p class="card-text" th:text="${product.description}">description</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.priceUah, 1, 'COMMA', 2, 'POINT')} + @{грн} ">priceUah</p>
+                        <p class="card-text" th:text="${#numbers.formatDecimal(product.priceUsd, 1, 'COMMA', 2, 'POINT')} + @{dollars}">priceUsd</p>
+
+                        <div th:if="${userRole=='USER'}">
+                            <form method="post" action="product/cart/">
+                                <input type="hidden" name="id" th:value="${product.id}">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Add to cart
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="admin-btns justify-content-between" th:if="${userRole=='ADMIN'}">
+                            <a th:href="@{|product/edit/?id=${product.id}|}" class="btn btn-warning admin-btn">Edit</a>
+                            <a th:href="@{|product/delete/?id=${product.id}|}"
+                               class="btn btn-danger float-right admin-btn">Delete</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
+    <br>
+    <div class="navigation container">
 
-        <form method="post">
+        <nav aria-label="page-navigation">
 
-            <div class="form-group">
-                <label for="name" class="col-sm-2 col-form-label">Наименование</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" required placeholder="name"
-                           th:value="${product.name}">
-                </div>
+            <!--if page number <= 5-->
+            <ul class="pagination justify-content-center" th:if="${pageNumber<=5}">
+                <li class="page-item"  th:each="i : ${#numbers.sequence( 1, pageCount)}"><a class="page-link" th:href="@{products(pageNumber=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
+            </ul>
+            <!--if page number > 5-->
+            <ul class="pagination justify-content-center" th:if="${pageNumber>5}">
+                <li class="page-item"><a class="page-link" th:href="@{products(pageNumber=1,productsOnPage=${productsOnPage})}">First</a></li>
+                <li class="page-item"  th:each="i : ${#numbers.sequence((pageNumber-2), (pageNumber+2))}"><a class="page-link" th:href="@{products(pageNumber=${i},productsOnPage=${productsOnPage})}" th:text="${i}">1</a></li>
+                <li class="page-item"><a class="page-link" th:href="@{products(pageNumber=${pageCount},productsOnPage=${productsOnPage})}">Last</a></li>
+            </ul>
+
+        </nav>
+
+        <form class="input-group col-3" method="get" action="products">
+
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="submit">Set products on page:</button>
             </div>
 
-            <div class="form-group">
-                <label for="priceUah" class="col-sm-2 col-form-label">Стоимость</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="priceUah" id="priceUah" required placeholder="priceUah"
-                           th:value="${product.priceUah}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="description" id="description"
-                           required placeholder="description" th:value="${product.description}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="imgLink" id="imgLink" required placeholder="imgLink"
-                           th:value="${product.imgLink}">
-                </div>
-            </div>
-
-            <div class="form-group row justify-content-center">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-            </div>
+            <select class="custom-select" id="productsOnPage" name="productsOnPage">
+                <option value="2">2</option>
+                <option selected value="4">4</option>
+                <option value="8">8</option>
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="48">48</option>
+            </select>
 
         </form>
 
     </div>
 </main>
 
+
 <footer class="footer">
+
     <div class="container footer">
 
         <div class="row  justify-content-between">
@@ -134,8 +161,10 @@
             </div>
 
         </div>
+
     </div>
 </footer>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

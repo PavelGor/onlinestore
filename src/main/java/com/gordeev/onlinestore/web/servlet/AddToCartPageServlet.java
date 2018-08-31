@@ -3,10 +3,12 @@ package com.gordeev.onlinestore.web.servlet;
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
+import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,14 +18,10 @@ import java.util.Optional;
 
 public class AddToCartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(AddToCartPageServlet.class);
+    private ApplicationContext applicationContext = AppContext.getInstance();
 
-    private ProductService productService;
-    private SecurityService securityService;
-
-    public AddToCartPageServlet(ProductService productService, SecurityService securityService) {
-        this.productService = productService;
-        this.securityService = securityService;
-    }
+    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
+    private ProductService productService = applicationContext.getBean(ProductService.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

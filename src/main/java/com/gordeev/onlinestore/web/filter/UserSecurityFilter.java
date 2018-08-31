@@ -5,8 +5,8 @@ import com.gordeev.onlinestore.security.SecurityService;
 
 public class UserSecurityFilter extends AbstractSecurityFilter{
 
-    public UserSecurityFilter(SecurityService securityService) {
-        super(securityService);
+    public UserSecurityFilter() {
+        super();
     }
 
     public UserRole getUserRole() {

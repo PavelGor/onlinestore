@@ -3,10 +3,12 @@ package com.gordeev.onlinestore.web.servlet.security;
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
+import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.service.UserService;
 import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -22,14 +24,10 @@ import java.util.UUID;
 public class LoginServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+    private ApplicationContext applicationContext = AppContext.getInstance();
 
-    private UserService userService;
-    private SecurityService securityService;
-
-    public LoginServlet(UserService userService, SecurityService securityService) {
-        this.userService = userService;
-        this.securityService = securityService;
-    }
+    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
+    private UserService userService = applicationContext.getBean(UserService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

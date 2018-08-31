@@ -4,10 +4,12 @@ import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
+import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -24,16 +26,14 @@ public class CartPageServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(CartPageServlet.class);
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
-    private SecurityService securityService;
-
-    public CartPageServlet(SecurityService securityService) {
-        this.securityService = securityService;
-    }
+    private ApplicationContext applicationContext = AppContext.getInstance();
+    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
         Map<String, Object> pageVariables = new HashMap<>();
+        response.setContentType("text/html;charset=utf-8");
 
         Optional<Session> optionalSession = securityService.getSession(ServletUtils.getToken(request));
         if (optionalSession.isPresent()){

@@ -3,9 +3,11 @@ package com.gordeev.onlinestore.web.servlet;
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.security.SecurityService;
+import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
+import org.springframework.context.ApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -19,19 +21,17 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ProductsServlet extends HttpServlet {
-    private ProductService productService;
-    private SecurityService securityService;
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
+    private ApplicationContext applicationContext = AppContext.getInstance();
 
-    public ProductsServlet(ProductService productService, SecurityService securityService) {
-        this.productService = productService;
-        this.securityService = securityService;
-    }
+    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
+    private ProductService productService = applicationContext.getBean(ProductService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
         Map<String, Object> pageVariables = new HashMap<>();
+        response.setContentType("text/html;charset=utf-8");
 
         String stringPageId = request.getParameter("pageNumber");
         int pageId = stringPageId != null? Integer.parseInt(stringPageId) : productService.getDefaultPageNumber();

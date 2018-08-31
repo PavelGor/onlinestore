@@ -15,7 +15,7 @@ public class ContentTypeFilter implements Filter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-        File file = new File("webapp",httpServletRequest.getRequestURI());
+        File file = new File("/",httpServletRequest.getRequestURI());
         httpServletResponse.setContentType(Files.probeContentType(file.toPath())+";charset=utf-8");
 
         chain.doFilter(request, response);

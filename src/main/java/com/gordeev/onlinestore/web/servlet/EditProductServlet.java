@@ -3,9 +3,11 @@ package com.gordeev.onlinestore.web.servlet;
 import com.gordeev.onlinestore.entity.Product;
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.security.SecurityService;
+import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.service.ProductService;
 import com.gordeev.onlinestore.web.servlet.util.ServletUtils;
 import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
+import org.springframework.context.ApplicationContext;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -20,18 +22,15 @@ import java.util.Optional;
 public class EditProductServlet extends HttpServlet {
     private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
 
-    private ProductService productService;
-    private SecurityService securityService;
-
-    public EditProductServlet(ProductService productService, SecurityService securityService) {
-        this.productService = productService;
-        this.securityService = securityService;
-    }
+    private ApplicationContext applicationContext = AppContext.getInstance();
+    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
+    private ProductService productService = applicationContext.getBean(ProductService.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         WebContext context = new WebContext(request, response, request.getServletContext(), request.getLocale());
         Map<String, Object> pageVariables = new HashMap<>();
+        response.setContentType("text/html;charset=utf-8");
 
         int id = Integer.parseInt(request.getParameter("id"));
         Product product = productService.getById(id);
