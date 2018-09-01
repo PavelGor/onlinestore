@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Cart</title>
+    <link  rel="stylesheet" type="text/css"   href="/css/styles.css">
 </head>
 <body>
 
@@ -31,6 +31,7 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+
                 <div>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
@@ -71,49 +72,41 @@
     <div class="container">
 
         <div>
-            <h3 class="col-sm-6">Подтвердите удаление товара:</h3>
+            <h3 class="col-sm-6">Заказать товар:</h3>
         </div>
 
-        <form method="post">
+        <form method="post" th:object="${productList}">
 
-            <div class="form-group">
-                <label for="name" class="col-sm-2 col-form-label">Наименование</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="name" id="name" required  placeholder="name"
-                           th:value="${product.name}">
+            <div class="row product justify-content-between" th:each="product :${productList}">
+                <div >
+                    <img class="product-img" th:src="@{${product.imgLink}}" alt="Cart image cap">
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="priceUah" class="col-sm-2 col-form-label">Стоимость</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="price" id="priceUah" required  placeholder="priceUah"
-                           th:value="${product.priceUah}">
+                <div class="product-name" th:text="${product.name}">
+                    name
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="description" class="col-sm-2 col-form-label">Описание:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="description" id="description"
-                           required  placeholder="description" th:value="${product.description}">
+                <div class="product-value" style="align-self: center" th:text="@{Стоимость: } + ${#numbers.formatDecimal(product.priceUah, 1, 'COMMA', 2, 'POINT')} + @{ грн} ">
+                    Стоимость: priceUah грн
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label for="description" class="col-sm-3 col-form-label">Ссылка на изображение:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="imgLink" id="imgLink" required  placeholder="imgLink"
-                           th:value="${product.imgLink}">
+                <div class="delete-btn">
+                    <a th:href="@{|product/cart/delete/?id=${product.id}|}" class="btn btn-outline-danger" >Delete</a>
                 </div>
+
             </div>
 
-            <div class="form-group row justify-content-center">
-                <button type="submit" class="btn btn-primary">Удалить</button>
-            </div>
+            <div class="row">
+                <div class="col-6 order-btn">
+                    <button type="submit" class="btn btn-primary  btn-block">Оформить заказ</button>
+                </div>
 
+                <div class="col-6 cart-value text-center" th:text="${#numbers.formatDecimal(#aggregates.sum(productList.![priceUah]), 1, 'COMMA', 2, 'POINT')} + @{ грн}">
+                    Итого: totalSum грн
+                </div>
+
+            </div>
         </form>
-
     </div>
 </main>
 
@@ -137,6 +130,7 @@
         </div>
     </div>
 </footer>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

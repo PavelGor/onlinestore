@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ServletUtilsTest {
+public class ControllerUtilsTest {
 
     private Product expectedProduct;
     private HttpServletRequest request;
@@ -36,7 +36,7 @@ public class ServletUtilsTest {
 
     @Test
     public void createProductFromRequestTest() {
-        Product actualProduct = ServletUtils.getProductFromRequest(request);
+        Product actualProduct = ControllerUtils.getProductFromRequest(request);
         assertNotNull(actualProduct);
         assertEquals(expectedProduct.getId(),actualProduct.getId());
         assertEquals(expectedProduct.getName(),actualProduct.getName());

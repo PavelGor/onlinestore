@@ -34,7 +34,7 @@ public class JdbcUserDao implements UserDao {
         return user;
     }
 
-    public void setDataSource(DataSource dataSource) { //TODO check without it, when take Spring factorypostprocessor
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 }

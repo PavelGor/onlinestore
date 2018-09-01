@@ -3,46 +3,40 @@ package com.gordeev.onlinestore.web.servlet.security;
 import com.gordeev.onlinestore.entity.User;
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
-import com.gordeev.onlinestore.service.AppContext;
 import com.gordeev.onlinestore.service.UserService;
-import com.gordeev.onlinestore.web.templater.ThymeleafPageGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public class LoginServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(LoginServlet.class);
-    private TemplateEngine templateEngine = ThymeleafPageGenerator.getInstance().getTemplateEngine();
-    private ApplicationContext applicationContext = AppContext.getInstance();
+@Controller
+@RequestMapping("/login")
+public class LoginController {
+    private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
-    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
-    private UserService userService = applicationContext.getBean(UserService.class);
+    @Autowired
+    private SecurityService securityService;
+    @Autowired
+    private UserService userService;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        WebContext context = new WebContext(request, response, request.getServletContext(),
-                request.getLocale());
-        String htmlString = templateEngine.process("login", context);
-        response.getWriter().println(htmlString);
+    @RequestMapping(method = RequestMethod.GET)
+    public String getLoginPage(){
+        return "login";
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-
+    @RequestMapping(method = RequestMethod.POST)
+    public String autenticateUser(@RequestParam String login,
+                                @RequestParam String password,
+                                HttpServletResponse response) {
         try {
             String token;
             User user = userService.autenticate(login, password);
@@ -57,10 +51,11 @@ public class LoginServlet extends HttpServlet {
             Cookie cookie = new Cookie("user-token", token);
             cookie.setMaxAge(securityService.getSessionMaxLifeTime());
             response.addCookie(cookie);
-            response.sendRedirect("/");
+
             LOG.info("User: {} logged in", user.getUserName());
+            return "redirect:/";
         } catch (SecurityException e) {
-            response.sendRedirect("/login");
+            return "redirect:/login";
         }
     }
 

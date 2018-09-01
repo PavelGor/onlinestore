@@ -2,26 +2,29 @@ package com.gordeev.onlinestore.web.servlet.security;
 
 import com.gordeev.onlinestore.security.SecurityService;
 import com.gordeev.onlinestore.security.Session;
-import com.gordeev.onlinestore.service.AppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-public class LogoutServlet extends HttpServlet {
-    private static final Logger LOG = LoggerFactory.getLogger(LogoutServlet.class);
-    private ApplicationContext applicationContext = AppContext.getInstance();
+@Controller
+@RequestMapping("/exit")
+public class LogoutController {
+    private static final Logger LOG = LoggerFactory.getLogger(LogoutController.class);
 
-    private SecurityService securityService = applicationContext.getBean(SecurityService.class);
+    @Autowired
+    private SecurityService securityService;
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @RequestMapping(method = RequestMethod.POST)
+    protected void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

@@ -5,7 +5,7 @@ import com.gordeev.onlinestore.entity.Product;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-public class ServletUtils {
+public class ControllerUtils {
     public static Product getProductFromRequest(HttpServletRequest request) {
         String idString = request.getParameter("id");
         String name = request.getParameter("name");
